@@ -1,0 +1,2 @@
+C:\Users\Elisa Kikota\Projects\CoICT 3D Map Game\3DCoICT\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\CMakeLists.txt
+C:\Users\Elisa Kikota\Projects\CoICT 3D Map Game\3DCoICT\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\CMakeLists.txt

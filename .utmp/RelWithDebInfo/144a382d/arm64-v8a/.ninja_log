@@ -1,0 +1,10 @@
+# ninja log v5
+106	5290	7803604552461052	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	f6be8953caed3a47
+146	5358	7803604552596206	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	1e7c7583502929e8
+70	5474	7803604554447686	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	5c4449b827fb3fac
+269	5574	7803604555497312	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	2957ac41fc5fe400
+36	5662	7803604556412149	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	fa2df66c8589faad
+231	6056	7803604560433877	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	1d3a97c4d40782d9
+193	6374	7803604563561219	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	7401aa3560d71d72
+1	6592	7803604565695820	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	77a68d953c65166e
+6593	6915	7803604568947914	C:/Users/Elisa Kikota/Projects/CoICT 3D Map Game/3DCoICT/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/144a382d/obj/arm64-v8a/libgame.so	dd0452f5ba1f820e
