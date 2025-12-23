@@ -14,6 +14,10 @@ public class BuildingHighlightManager : MonoBehaviour
     public Transform campusRoot; // Reference to CampusRoot containing all buildings
     public List<GameObject> allBuildingObjects = new List<GameObject>();
     
+    [Header("Door Glow")]
+    [Tooltip("Enable door glow effect when highlighting buildings")]
+    public bool enableDoorGlow = true;
+    
     [Header("Materials")]
     public Material highlightMaterial;
     public Material transparentMaterial;
@@ -22,6 +26,7 @@ public class BuildingHighlightManager : MonoBehaviour
     private Dictionary<GameObject, Renderer[]> buildingRenderers = new Dictionary<GameObject, Renderer[]>();
     private GameObject currentlyHighlighted = null;
     private bool isHighlightMode = false;
+    private DoorGlowEffect[] currentDoorGlows = null;
     
     void Start()
     {
@@ -172,6 +177,12 @@ public class BuildingHighlightManager : MonoBehaviour
         // Apply transparency to other buildings
         ApplyTransparencyToOtherBuildings(building);
         
+        // Enable door glow effect
+        if (enableDoorGlow)
+        {
+            EnableDoorGlow(building);
+        }
+        
         Debug.Log($"[BuildingHighlightManager] Highlighted building: {building.name}");
     }
     
@@ -240,10 +251,77 @@ public class BuildingHighlightManager : MonoBehaviour
             }
         }
         
+        // Disable door glow
+        DisableDoorGlow();
+        
         isHighlightMode = false;
         currentlyHighlighted = null;
         
         Debug.Log("[BuildingHighlightManager] Reset all buildings to original materials");
+    }
+    
+    void EnableDoorGlow(GameObject building)
+    {
+        // Disable any existing door glows first
+        DisableDoorGlow();
+        
+        // Find door objects in the building
+        DoorGlowEffect[] doorGlows = building.GetComponentsInChildren<DoorGlowEffect>(true);
+        
+        if (doorGlows != null && doorGlows.Length > 0)
+        {
+            currentDoorGlows = doorGlows;
+            foreach (DoorGlowEffect glow in doorGlows)
+            {
+                if (glow != null)
+                {
+                    glow.StartGlow();
+                }
+            }
+            Debug.Log($"[BuildingHighlightManager] Enabled door glow on {doorGlows.Length} doors");
+        }
+        else
+        {
+            // Try to find doors by name or tag
+            Transform[] allChildren = building.GetComponentsInChildren<Transform>(true);
+            List<DoorGlowEffect> foundGlows = new List<DoorGlowEffect>();
+            
+            foreach (Transform child in allChildren)
+            {
+                string childName = child.name.ToLower();
+                if (childName.Contains("door") || childName.Contains("entrance") || childName.Contains("entry"))
+                {
+                    DoorGlowEffect glow = child.GetComponent<DoorGlowEffect>();
+                    if (glow == null)
+                    {
+                        glow = child.gameObject.AddComponent<DoorGlowEffect>();
+                    }
+                    glow.StartGlow();
+                    foundGlows.Add(glow);
+                }
+            }
+            
+            if (foundGlows.Count > 0)
+            {
+                currentDoorGlows = foundGlows.ToArray();
+                Debug.Log($"[BuildingHighlightManager] Created and enabled door glow on {foundGlows.Count} doors");
+            }
+        }
+    }
+    
+    void DisableDoorGlow()
+    {
+        if (currentDoorGlows != null)
+        {
+            foreach (DoorGlowEffect glow in currentDoorGlows)
+            {
+                if (glow != null)
+                {
+                    glow.StopGlow();
+                }
+            }
+            currentDoorGlows = null;
+        }
     }
     
     // Emergency reset method to fix pink materials

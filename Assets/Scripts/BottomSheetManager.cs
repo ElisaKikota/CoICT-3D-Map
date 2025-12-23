@@ -20,6 +20,10 @@ public class BottomSheetManager : MonoBehaviour
     [Header("Highlight System")]
     public BuildingHighlightManager highlightManager;
     
+    [Header("Camera Movement")]
+    public CameraMovementController cameraMovementController;
+    public CameraModeController cameraModeController;
+    
     [Header("Animation Settings")]
     public float slideUpDuration = 0.3f;
     public float slideDownDuration = 0.2f;
@@ -276,9 +280,24 @@ public class BottomSheetManager : MonoBehaviour
         if (currentBuilding != null)
         {
             Debug.Log($"[BottomSheetManager] Go button clicked for: {currentBuilding.name}");
-            Debug.Log($"[BottomSheetManager] Moving camera to: {currentBuilding.cameraViewPosition}");
-            // TODO: Implement camera movement functionality in Phase 4
-            // This will move the camera to the building's viewing position
+            
+            // Use camera movement controller if available
+            if (cameraMovementController != null)
+            {
+                // Check if we're in drone mode for two-phase movement
+                bool useDronePath = false;
+                if (cameraModeController != null && cameraModeController.currentMode == TourMode.Drone)
+                {
+                    useDronePath = true;
+                }
+                
+                cameraMovementController.MoveToBuilding(currentBuilding, useDronePath);
+                Debug.Log($"[BottomSheetManager] Moving camera to: {currentBuilding.cameraViewPosition}");
+            }
+            else
+            {
+                Debug.LogWarning("[BottomSheetManager] CameraMovementController not assigned!");
+            }
         }
     }
     
