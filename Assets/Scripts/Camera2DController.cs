@@ -3,9 +3,9 @@ using UnityEngine;
 public class Camera2DController : MonoBehaviour
 {
     public float panSpeed = 0.5f;
-    public float zoomSpeed = 10f;
-    public float minHeight = 50f;   // Closest to ground (highest zoom)
-    public float maxHeight = 300f;  // Furthest from ground (lowest zoom)
+    public float zoomSpeed = 5f;
+    public float minZoom = 10f;
+    public float maxZoom = 60f;
 
     private Vector3 lastMousePos;
 
@@ -21,59 +21,33 @@ public class Camera2DController : MonoBehaviour
             lastMousePos = Input.mousePosition;
         }
 
-        // Zoom with mouse scroll wheel
+        // Zoom
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-        if (scroll != 0)
-        {
-            Vector3 currentPos = transform.position;
-            float newHeight = currentPos.y - (scroll * zoomSpeed * 10f); // Multiply by 10 for more responsive scrolling
-            newHeight = Mathf.Clamp(newHeight, minHeight, maxHeight);
-            transform.position = new Vector3(currentPos.x, newHeight, currentPos.z);
-        }
+        Camera.main.orthographicSize -= scroll * zoomSpeed;
+        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, minZoom, maxZoom);
 
-        // Touch pinch removed - using buttons instead
+        // Touch pinch
+        if (Input.touchCount == 2)
+        {
+            Touch t0 = Input.GetTouch(0);
+            Touch t1 = Input.GetTouch(1);
+            Vector2 prevDist = (t0.position - t0.deltaPosition) - (t1.position - t1.deltaPosition);
+            Vector2 curDist = t0.position - t1.position;
+            float delta = prevDist.magnitude - curDist.magnitude;
+            Camera.main.orthographicSize += delta * 0.02f;
+            Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, minZoom, maxZoom);
+        }
     }
 
-    // Public methods for zoom buttons
     public void ZoomIn()
     {
-        Vector3 currentPos = transform.position;
-        float newHeight = currentPos.y - zoomSpeed;
-        newHeight = Mathf.Clamp(newHeight, minHeight, maxHeight);
-        
-        transform.position = new Vector3(currentPos.x, newHeight, currentPos.z);
-        
-        if (currentPos.y == newHeight)
-        {
-            Debug.Log($"[Camera2DController] ZoomIn - Already at minimum height ({minHeight}) - closest zoom");
-        }
-        else
-        {
-            Debug.Log($"[Camera2DController] ZoomIn - Height: {currentPos.y} -> {newHeight} (closer to ground)");
-        }
+        Camera.main.orthographicSize -= zoomSpeed;
+        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, minZoom, maxZoom);
     }
 
     public void ZoomOut()
     {
-        Vector3 currentPos = transform.position;
-        float newHeight = currentPos.y + zoomSpeed;
-        newHeight = Mathf.Clamp(newHeight, minHeight, maxHeight);
-        
-        transform.position = new Vector3(currentPos.x, newHeight, currentPos.z);
-        
-        if (currentPos.y == newHeight)
-        {
-            Debug.Log($"[Camera2DController] ZoomOut - Already at maximum height ({maxHeight}) - furthest zoom");
-        }
-        else
-        {
-            Debug.Log($"[Camera2DController] ZoomOut - Height: {currentPos.y} -> {newHeight} (further from ground)");
-        }
-    }
-
-    // Get current zoom percentage (0 = min height/closest zoom, 1 = max height/furthest zoom)
-    public float GetZoomPercentage()
-    {
-        return (transform.position.y - minHeight) / (maxHeight - minHeight);
+        Camera.main.orthographicSize += zoomSpeed;
+        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, minZoom, maxZoom);
     }
 }

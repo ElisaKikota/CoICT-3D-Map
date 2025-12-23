@@ -3891,7 +3891,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fdbbbcd241cdfe468d61b1ce3f1779c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  container: {fileID: 0}
+  container: {fileID: 363034400}
+  zoomInButton: {fileID: 1262960687}
+  zoomOutButton: {fileID: 1829470341}
+  camera2DController: {fileID: 330585548}
 --- !u!4 &1228680333
 Transform:
   m_ObjectHideFlags: 0
@@ -6017,6 +6020,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   container: {fileID: 0}
+  zoomInButton: {fileID: 0}
+  zoomOutButton: {fileID: 0}
+  camera2DController: {fileID: 0}
 --- !u!1 &2006341017
 GameObject:
   m_ObjectHideFlags: 0

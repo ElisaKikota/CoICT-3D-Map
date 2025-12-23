@@ -31,7 +31,7 @@ public class MaterialFixer : MonoBehaviour
         }
         
         // Also try to reset all renderers in the scene
-        Renderer[] allRenderers = FindObjectsOfType<Renderer>();
+        Renderer[] allRenderers = FindObjectsByType<Renderer>(FindObjectsSortMode.None);
         foreach (Renderer renderer in allRenderers)
         {
             if (renderer != null)

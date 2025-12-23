@@ -260,7 +260,7 @@ public class BottomSheetManager : MonoBehaviour
         
         // If not found by name, try to find by position (with tolerance)
         float tolerance = 1f;
-        foreach (GameObject obj in GameObject.FindObjectsOfType<GameObject>())
+        foreach (GameObject obj in GameObject.FindObjectsByType<GameObject>(FindObjectsSortMode.None))
         {
             if (Vector3.Distance(obj.transform.position, building.position) < tolerance)
             {
