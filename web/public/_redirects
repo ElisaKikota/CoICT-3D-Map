@@ -1,5 +1,0 @@
-# Serve Unity files directly - these must come BEFORE the catch-all
-/unity/*    /unity/:splat    200
-
-# Redirect everything else to index.html for React SPA routing
-/*    /index.html    200

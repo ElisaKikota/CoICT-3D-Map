@@ -35,7 +35,13 @@ for = "/unity/*.js*"
   command = "npm run build"
   publish = "dist"
 
-# Note: Redirects are handled by _redirects file in public/ folder
-# This file gets copied to dist/ during build and ensures static files are served correctly
+# Redirect all routes to index.html for React SPA routing
+# force = false means: only redirect if the file doesn't exist
+# This allows Unity files and other static assets to be served correctly
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
 
 
