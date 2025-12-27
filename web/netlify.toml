@@ -35,7 +35,7 @@ for = "/unity/*.js*"
   command = "npm run build"
   publish = "dist"
 
-# Using _redirects file in public/ folder instead of netlify.toml redirects
-# This ensures static files (Unity files) are served correctly before redirects
+# Note: Redirects are handled by _redirects file in public/ folder
+# This file gets copied to dist/ during build and ensures static files are served correctly
 
 
