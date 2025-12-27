@@ -1,0 +1,6 @@
+# Netlify redirects file
+# This file is copied to dist/ during build
+# Static files are served automatically, only redirect non-existent paths
+
+/*    /index.html    200
+

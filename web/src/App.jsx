@@ -61,11 +61,19 @@ function App() {
       console.log('Unity game iframe loaded')
     }
 
+    const handleIframeError = (error) => {
+      console.error('Iframe error:', error)
+      // Show error message to user
+      alert('Failed to load the game. Please check the browser console for details.')
+    }
+
     iframe.addEventListener('load', handleIframeLoad)
+    iframe.addEventListener('error', handleIframeError)
     
     return () => {
       if (iframe) {
         iframe.removeEventListener('load', handleIframeLoad)
+        iframe.removeEventListener('error', handleIframeError)
       }
     }
   }, [gameLoaded])
