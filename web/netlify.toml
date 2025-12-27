@@ -28,6 +28,10 @@ for = "/unity/*.js*"
   [headers.values]
   Content-Type = "application/javascript"
 
+[build]
+  command = "npm run build"
+  publish = "dist"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
