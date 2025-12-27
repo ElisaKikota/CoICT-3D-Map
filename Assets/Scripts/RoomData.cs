@@ -18,8 +18,18 @@ public class RoomData
     public Quaternion entryRotation;
     
     [Header("Boundaries")]
-    [Tooltip("Colliders that define room boundaries (walls, etc.)")]
+    [Tooltip("Colliders that define room boundaries (walls, etc.). Supports multiple colliders for L-shapes, complex corridors, etc.")]
     public Collider[] boundaryColliders;
+    
+    [Tooltip("Use mesh colliders from room geometry instead of boundary colliders")]
+    public bool useMeshColliders = false;
+    
+    [Tooltip("Parent GameObject containing the room mesh (for mesh collider detection if useMeshColliders is true)")]
+    public GameObject roomMeshParent;
+    
+    [Header("Doors in This Room")]
+    [Tooltip("Doors that exist inside this room (for navigation to other rooms/exits)")]
+    public DoorData[] interiorDoors;
     
     [Header("Lighting")]
     [Tooltip("Lights that should be enabled/strengthened in this room")]
@@ -36,4 +46,6 @@ public class RoomData
         entryRotation = entryRot;
     }
 }
+
+
 

@@ -1,6 +1,7 @@
 // SimpleJoystick.cs
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class SimpleJoystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDownHandler
 {
@@ -13,6 +14,35 @@ public class SimpleJoystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IP
         // try auto-assign handle if child exists
         if (transform.childCount > 0)
             handle = transform.GetChild(0) as RectTransform;
+    }
+    
+    void Start()
+    {
+        // Validation checks
+        if (handle == null)
+        {
+            Debug.LogWarning($"[SimpleJoystick] Handle not assigned on {gameObject.name}! Joystick will not move visually.");
+        }
+        
+        // Check if this GameObject has a Graphic component (needed for raycasting)
+        Graphic graphic = GetComponent<Graphic>();
+        if (graphic == null)
+        {
+            // Try to add an Image component if none exists
+            Image img = GetComponent<Image>();
+            if (img == null)
+            {
+                Debug.LogWarning($"[SimpleJoystick] {gameObject.name} has no Graphic component (Image, Text, etc.). Adding Image component for touch detection.");
+                img = gameObject.AddComponent<Image>();
+                img.color = new Color(1, 1, 1, 0); // Make it transparent so it's invisible but still receives events
+            }
+        }
+        
+        // Check for EventSystem
+        if (EventSystem.current == null)
+        {
+            Debug.LogError("[SimpleJoystick] No EventSystem found in scene! Joystick will not work. Add UI → Event System to the scene.");
+        }
     }
 
     public void OnPointerDown(PointerEventData eventData) 

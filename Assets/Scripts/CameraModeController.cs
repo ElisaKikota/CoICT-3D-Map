@@ -16,6 +16,11 @@ public class CameraModeController : MonoBehaviour
     public JoystickManager joystickManager;   // Assign JoystickManager
     public ZoomButtonManager zoomButtonManager; // Assign ZoomButtonManager
     
+    [Header("Sidebar")]
+    public GameObject sidebar;                // Sidebar GameObject (renamed from AutocompleteDropdown)
+    public RectTransform sidebarRect;         // Sidebar RectTransform (optional, auto-detected if not assigned)
+    public Button buildingIconButton;         // Building icon button in top bar
+    
     [Header("Eye Button Settings")]
     private bool joysticksVisible = true;     // Track joystick visibility state
 
@@ -37,6 +42,10 @@ public class CameraModeController : MonoBehaviour
     [Header("Settings")]
     public float transitionSpeed = 5f;
     
+    [Header("Sidebar Animation")]
+    public float sidebarSlideDuration = 0.3f;
+    public AnimationCurve sidebarSlideCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    
     [Header("Fog Settings")]
     public bool enableFog = true;
     public float fogStartDistance = 50f;
@@ -46,6 +55,12 @@ public class CameraModeController : MonoBehaviour
 
     [HideInInspector]
     public TourMode currentMode;
+    
+    // Sidebar state
+    private bool isSidebarOpen = false;
+    private Vector2 sidebarHiddenPosition;
+    private Vector2 sidebarVisiblePosition;
+    private Coroutine sidebarSlideCoroutine;
 
     void Awake()
     {
@@ -83,6 +98,13 @@ public class CameraModeController : MonoBehaviour
             eyeButton.onClick.RemoveAllListeners();
             eyeButton.onClick.AddListener(() => OnEyeButton());
         }
+        
+        // Setup building icon button for sidebar toggle
+        if (buildingIconButton != null)
+        {
+            buildingIconButton.onClick.RemoveAllListeners();
+            buildingIconButton.onClick.AddListener(() => OnBuildingIconButton());
+        }
 
         // Ensure controllers start disabled
         if (camera2DController != null) camera2DController.enabled = false;
@@ -103,6 +125,9 @@ public class CameraModeController : MonoBehaviour
 
         // Initialize fog settings
         SetupFog();
+        
+        // Initialize sidebar positions
+        InitializeSidebar();
 
         // Force initial mode to 2D
         SwitchMode(TourMode.Mode2D);
@@ -163,17 +188,25 @@ public class CameraModeController : MonoBehaviour
         
         if (droneController != null)
         {
+            // Check if DroneController was disabled BEFORE enabling it (means sidebar is handling movement)
+            bool wasDisabled = !droneController.enabled;
+            
             droneController.enabled = (mode == TourMode.Drone);
-            Debug.Log($"[CameraModeController] DroneController enabled: {droneController.enabled}");
+            Debug.Log($"[CameraModeController] DroneController enabled: {droneController.enabled} (was disabled: {wasDisabled})");
             
             // Set camera to 30-degree X rotation and height 50 when entering drone mode
-            if (mode == TourMode.Drone && mainCamera != null)
+            // BUT: Skip this if DroneController was disabled before we enabled it (means sidebar button is handling movement)
+            if (mode == TourMode.Drone && mainCamera != null && !wasDisabled)
             {
                 Vector3 currentPosition = mainCamera.transform.position;
                 Vector3 currentRotation = mainCamera.transform.eulerAngles;
                 StartCoroutine(SmoothMoveTo(new Vector3(currentPosition.x, 50f, currentPosition.z)));
                 StartCoroutine(SmoothRotateTo(30f, currentRotation.y, 0f));
                 Debug.Log($"[CameraModeController] Smoothly moving camera to height 50 and rotating to 30 degrees for drone mode");
+            }
+            else if (mode == TourMode.Drone && wasDisabled)
+            {
+                Debug.Log($"[CameraModeController] Skipping automatic camera movement - DroneController was disabled before switch (sidebar movement in progress)");
             }
         }
         
@@ -182,9 +215,9 @@ public class CameraModeController : MonoBehaviour
         {
             Vector3 currentPosition = mainCamera.transform.position;
             Vector3 currentRotation = mainCamera.transform.eulerAngles;
-            StartCoroutine(SmoothMoveTo(new Vector3(currentPosition.x, 2f, currentPosition.z)));
+            StartCoroutine(SmoothMoveTo(new Vector3(currentPosition.x, -1f, currentPosition.z)));
             StartCoroutine(SmoothRotateTo(0f, currentRotation.y, 0f));
-            Debug.Log($"[CameraModeController] Smoothly moving camera to height 2 and rotating to 0 degrees for walk mode");
+            Debug.Log($"[CameraModeController] Smoothly moving camera to height -1 and rotating to 0 degrees for walk mode");
         }
 
         // Reset joystick visibility state when switching to 2D mode
@@ -304,6 +337,12 @@ public class CameraModeController : MonoBehaviour
     public void On2DButton() => SwitchMode(TourMode.Mode2D);
     public void OnDroneButton() => SwitchMode(TourMode.Drone);
     public void OnWalkButton() => SwitchMode(TourMode.Walk);
+    
+    // Building icon button functionality - toggles sidebar
+    public void OnBuildingIconButton()
+    {
+        ToggleSidebar();
+    }
     
     // Eye button functionality - toggles joystick visibility
     public void OnEyeButton()
@@ -439,5 +478,181 @@ public class CameraModeController : MonoBehaviour
             RenderSettings.fog = true;
             ForceFogKeywords();
         }
+    }
+    
+    // Sidebar initialization and control methods
+    void InitializeSidebar()
+    {
+        // Try to get RectTransform if not directly assigned
+        if (sidebarRect == null && sidebar != null)
+        {
+            sidebarRect = sidebar.GetComponent<RectTransform>();
+        }
+        
+        if (sidebarRect != null)
+        {
+            // Set the visible position to the specified coordinates
+            // With top-left anchor: X positive = right, Y positive = down
+            sidebarVisiblePosition = new Vector2(17f, -257f);
+            
+            // Calculate hidden position (off-screen to the left)
+            // Use screen width to ensure it's completely off-screen
+            Canvas canvas = sidebarRect.GetComponentInParent<Canvas>();
+            float screenWidth = 2000f; // Default large value
+            
+            if (canvas != null)
+            {
+                if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
+                {
+                    screenWidth = Screen.width;
+                }
+                else if (canvas.renderMode == RenderMode.ScreenSpaceCamera || canvas.renderMode == RenderMode.WorldSpace)
+                {
+                    // For non-overlay canvases, use canvas scaler or a large fixed value
+                    UnityEngine.UI.CanvasScaler scaler = canvas.GetComponent<UnityEngine.UI.CanvasScaler>();
+                    if (scaler != null)
+                    {
+                        screenWidth = scaler.referenceResolution.x;
+                    }
+                    else
+                    {
+                        screenWidth = 2000f; // Fallback large value
+                    }
+                }
+            }
+            
+            // Hidden position is far to the left (negative screen width), preserving Y position
+            sidebarHiddenPosition = new Vector2(-screenWidth, sidebarVisiblePosition.y);
+            
+            // Start with sidebar hidden (move off-screen left and deactivate)
+            sidebarRect.anchoredPosition = sidebarHiddenPosition;
+            if (sidebar != null)
+            {
+                sidebar.SetActive(false);
+            }
+            
+            Debug.Log($"[CameraModeController] Sidebar initialized - Visible: {sidebarVisiblePosition}, Hidden: {sidebarHiddenPosition}, Screen Width: {screenWidth}");
+        }
+        else if (sidebar != null)
+        {
+            Debug.LogWarning("[CameraModeController] Sidebar RectTransform not found! Building button toggle will not work.");
+        }
+    }
+    
+    void ToggleSidebar()
+    {
+        // Don't toggle in interior mode
+        InteriorExteriorManager interiorManager = FindFirstObjectByType<InteriorExteriorManager>();
+        if (interiorManager != null && interiorManager.IsInteriorMode())
+        {
+            Debug.Log($"[CameraModeController] Sidebar toggle blocked - in interior mode (isInteriorMode: {interiorManager.IsInteriorMode()})");
+            return;
+        }
+        
+        if (isSidebarOpen)
+        {
+            CloseSidebar();
+        }
+        else
+        {
+            OpenSidebar();
+        }
+    }
+    
+    void OpenSidebar()
+    {
+        // Don't show sidebar in interior mode
+        InteriorExteriorManager interiorManager = FindFirstObjectByType<InteriorExteriorManager>();
+        if (interiorManager != null && interiorManager.IsInteriorMode())
+        {
+            Debug.Log($"[CameraModeController] Sidebar not shown - in interior mode (isInteriorMode: {interiorManager.IsInteriorMode()})");
+            return;
+        }
+        
+        if (sidebar == null || sidebarRect == null) 
+        {
+            Debug.LogWarning("[CameraModeController] Sidebar or RectTransform not assigned!");
+            return;
+        }
+        
+        // If already open, don't do anything
+        if (isSidebarOpen)
+        {
+            Debug.Log("[CameraModeController] Sidebar already open, ignoring open request");
+            return;
+        }
+        
+        if (sidebarSlideCoroutine != null)
+        {
+            StopCoroutine(sidebarSlideCoroutine);
+            sidebarSlideCoroutine = null;
+        }
+        
+        // Ensure visible position is set correctly before opening
+        sidebarVisiblePosition = new Vector2(17f, -257f);
+        sidebarHiddenPosition = new Vector2(-2000f, sidebarVisiblePosition.y);
+        
+        sidebar.SetActive(true);
+        sidebarSlideCoroutine = StartCoroutine(SlideSidebar(sidebarHiddenPosition, sidebarVisiblePosition));
+        isSidebarOpen = true;
+        
+        Debug.Log($"[CameraModeController] Sidebar opened - Target position: {sidebarVisiblePosition}, isInteriorMode: {(interiorManager != null ? interiorManager.IsInteriorMode().ToString() : "N/A")}");
+    }
+    
+    void CloseSidebar()
+    {
+        CloseSidebarPublic();
+    }
+    
+    // Public method to close sidebar (called from other scripts)
+    public void CloseSidebarPublic()
+    {
+        if (sidebarRect == null) 
+        {
+            Debug.LogWarning("[CameraModeController] Sidebar RectTransform not assigned!");
+            return;
+        }
+        
+        // Only close if actually open
+        if (!isSidebarOpen)
+        {
+            return; // Already closed, don't do anything
+        }
+        
+        if (sidebarSlideCoroutine != null)
+        {
+            StopCoroutine(sidebarSlideCoroutine);
+        }
+        
+        sidebarSlideCoroutine = StartCoroutine(SlideSidebar(sidebarVisiblePosition, sidebarHiddenPosition));
+        isSidebarOpen = false;
+        
+        Debug.Log("[CameraModeController] Sidebar closed");
+    }
+    
+    System.Collections.IEnumerator SlideSidebar(Vector2 startPos, Vector2 endPos)
+    {
+        float elapsedTime = 0f;
+        
+        while (elapsedTime < sidebarSlideDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float progress = elapsedTime / sidebarSlideDuration;
+            float curveValue = sidebarSlideCurve.Evaluate(progress);
+            
+            sidebarRect.anchoredPosition = Vector2.Lerp(startPos, endPos, curveValue);
+            
+            yield return null;
+        }
+        
+        sidebarRect.anchoredPosition = endPos;
+        
+        // Hide sidebar GameObject when fully closed
+        if (!isSidebarOpen && sidebar != null)
+        {
+            sidebar.SetActive(false);
+        }
+        
+        sidebarSlideCoroutine = null;
     }
 }

@@ -10,25 +10,34 @@ public class BottomSheetManager : MonoBehaviour
     public RectTransform bottomSheetRect;
     public TextMeshProUGUI buildingNameText;
     public TextMeshProUGUI buildingDescriptionText;
-    public TextMeshProUGUI buildingLocationText;
+    public TextMeshProUGUI buildingFeaturesText;
     
     [Header("Action Buttons")]
     public Button closeButton;
     public Button highlightButton;
-    public Button goButton;
+    public Button goButton; // Keep for future use, but hide it for now
+    public Button enterInsideButton; // New button for entering building interiors
     
     [Header("Highlight System")]
     public BuildingHighlightManager highlightManager;
+    
+    [Header("Navigation UI")]
+    public NavigationUIManager navigationUIManager;
     
     [Header("Camera Movement")]
     public CameraMovementController cameraMovementController;
     public CameraModeController cameraModeController;
     
+    [Header("Building Entry System")]
+    public BuildingEntrySystem buildingEntrySystem;
+    
+    [Header("Sidebar Button Handler")]
+    [Tooltip("Reference to SidebarButtonHandler for glow functionality")]
+    public SidebarButtonHandler sidebarButtonHandler;
+    
     [Header("Animation Settings")]
-    public float slideUpDuration = 0.3f;
-    public float slideDownDuration = 0.2f;
-    public AnimationCurve slideUpCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
-    public AnimationCurve slideDownCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    public float slideDuration = 0.3f;
+    public AnimationCurve slideCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     
     [Header("Visual Settings")]
     public Color normalButtonColor = Color.white;
@@ -36,6 +45,7 @@ public class BottomSheetManager : MonoBehaviour
     public Color goButtonColor = new Color(0.2f, 1f, 0.2f, 1f);
     
     private BuildingData currentBuilding;
+    private SidebarButtonHandler currentSidebarButtonHandler;
     private bool isVisible = false;
     private Vector2 hiddenPosition;
     private Vector2 visiblePosition;
@@ -54,11 +64,14 @@ public class BottomSheetManager : MonoBehaviour
             return;
         }
         
-        // Calculate positions
-        hiddenPosition = new Vector2(0, -bottomSheetRect.rect.height);
-        visiblePosition = Vector2.zero;
+        // IMPORTANT: Capture visible position BEFORE moving it (preserve Y position)
+        // The bottom sheet should be positioned correctly in the editor where you want it visible
+        visiblePosition = bottomSheetRect.anchoredPosition;
         
-        // Start hidden
+        // Calculate hidden position - off-screen to the left, but preserve Y position
+        hiddenPosition = new Vector2(-bottomSheetRect.rect.width, visiblePosition.y);
+        
+        // Start hidden (move off-screen to the left)
         bottomSheetRect.anchoredPosition = hiddenPosition;
         
         if (bottomSheetPanel != null)
@@ -66,7 +79,7 @@ public class BottomSheetManager : MonoBehaviour
             bottomSheetPanel.SetActive(false);
         }
         
-        Debug.Log("[BottomSheetManager] Bottom sheet initialized and hidden");
+        Debug.Log($"[BottomSheetManager] Bottom sheet initialized. Visible position: {visiblePosition}, Hidden position: {hiddenPosition}");
     }
     
     void SetupButtons()
@@ -88,9 +101,21 @@ public class BottomSheetManager : MonoBehaviour
         {
             goButton.onClick.AddListener(OnGoButtonClicked);
         }
+        
+        // Setup enter inside button
+        if (enterInsideButton != null)
+        {
+            enterInsideButton.onClick.AddListener(OnEnterInsideButtonClicked);
+        }
+        
+        // Find building entry system if not assigned
+        if (buildingEntrySystem == null)
+        {
+            buildingEntrySystem = FindFirstObjectByType<BuildingEntrySystem>();
+        }
     }
     
-    public void ShowBuildingDetails(BuildingData building)
+    public void ShowBuildingDetails(BuildingData building, SidebarButtonHandler handler = null)
     {
         if (building == null)
         {
@@ -98,35 +123,82 @@ public class BottomSheetManager : MonoBehaviour
             return;
         }
         
+        Debug.Log($"[BottomSheetManager] ShowBuildingDetails called for: {building.name}, Description: '{building.description}', Features: '{building.features}'");
+        
         currentBuilding = building;
+        currentSidebarButtonHandler = handler;
         
         // Update UI content
         UpdateBuildingInfo(building);
         
-        // Show bottom sheet with animation
-        StartCoroutine(SlideUp());
+        // Show bottom sheet with animation (slide from left)
+        StartCoroutine(SlideIn());
         
-        Debug.Log($"[BottomSheetManager] Showing details for: {building.name}");
+        Debug.Log($"[BottomSheetManager] Bottom sheet slide animation started for: {building.name}");
     }
     
     void UpdateBuildingInfo(BuildingData building)
     {
+        Debug.Log($"[BottomSheetManager] Updating UI - Name: '{building.name}', Description: '{building.description}', Features: '{building.features}'");
+        
         // Update building name
         if (buildingNameText != null)
         {
             buildingNameText.text = building.name;
+            Debug.Log($"[BottomSheetManager] Set buildingNameText to: '{building.name}'");
+        }
+        else
+        {
+            Debug.LogWarning("[BottomSheetManager] buildingNameText is null!");
         }
         
         // Update building description
         if (buildingDescriptionText != null)
         {
             buildingDescriptionText.text = building.description;
+            Debug.Log($"[BottomSheetManager] Set buildingDescriptionText to: '{building.description}'");
+        }
+        else
+        {
+            Debug.LogWarning("[BottomSheetManager] buildingDescriptionText is null!");
         }
         
-        // Update building location
-        if (buildingLocationText != null)
+        // Update building features
+        if (buildingFeaturesText != null)
         {
-            buildingLocationText.text = $"Position: {building.position.x:F1}, {building.position.y:F1}, {building.position.z:F1}";
+            buildingFeaturesText.text = !string.IsNullOrEmpty(building.features) ? building.features : "";
+            Debug.Log($"[BottomSheetManager] Set buildingFeaturesText to: '{buildingFeaturesText.text}'");
+        }
+        else
+        {
+            Debug.LogWarning("[BottomSheetManager] buildingFeaturesText is null!");
+        }
+        
+        // Hide go button, only show highlight button
+        if (goButton != null)
+        {
+            goButton.gameObject.SetActive(false);
+        }
+        
+        if (highlightButton != null)
+        {
+            highlightButton.gameObject.SetActive(true);
+        }
+        
+        // Show "Enter Inside" button if building has door position set OR has interior
+        // This allows the button to show even if interior isn't set up yet (just moves camera to door)
+        if (enterInsideButton != null)
+        {
+            // Check if the handler wants to show the enter building button
+            bool handlerWantsToShow = currentSidebarButtonHandler != null && currentSidebarButtonHandler.showEnterBuilding;
+            
+            // Also check if building has door position or interior (for backwards compatibility when handler is null)
+            bool hasDoorPosition = building.enterBuildingCameraPosition != Vector3.zero;
+            bool hasInterior = buildingEntrySystem != null && buildingEntrySystem.BuildingHasInterior(building.name);
+            
+            // Show button if handler explicitly wants it, OR if no handler is assigned and building has door/interior (legacy support)
+            bool shouldShow = handlerWantsToShow || (currentSidebarButtonHandler == null && (hasDoorPosition || hasInterior));
+            enterInsideButton.gameObject.SetActive(shouldShow);
         }
         
         // Update button colors
@@ -152,7 +224,7 @@ public class BottomSheetManager : MonoBehaviour
         }
     }
     
-    IEnumerator SlideUp()
+    IEnumerator SlideIn()
     {
         if (bottomSheetPanel != null)
         {
@@ -166,11 +238,11 @@ public class BottomSheetManager : MonoBehaviour
         
         float elapsedTime = 0f;
         
-        while (elapsedTime < slideUpDuration)
+        while (elapsedTime < slideDuration)
         {
             elapsedTime += Time.deltaTime;
-            float progress = elapsedTime / slideUpDuration;
-            float curveValue = slideUpCurve.Evaluate(progress);
+            float progress = elapsedTime / slideDuration;
+            float curveValue = slideCurve.Evaluate(progress);
             
             bottomSheetRect.anchoredPosition = Vector2.Lerp(startPos, endPos, curveValue);
             
@@ -178,21 +250,21 @@ public class BottomSheetManager : MonoBehaviour
         }
         
         bottomSheetRect.anchoredPosition = endPos;
-        Debug.Log("[BottomSheetManager] Bottom sheet slide up completed");
+        Debug.Log("[BottomSheetManager] Bottom sheet slide in from left completed");
     }
     
-    IEnumerator SlideDown()
+    IEnumerator SlideOut()
     {
         Vector2 startPos = bottomSheetRect.anchoredPosition;
         Vector2 endPos = hiddenPosition;
         
         float elapsedTime = 0f;
         
-        while (elapsedTime < slideDownDuration)
+        while (elapsedTime < slideDuration)
         {
             elapsedTime += Time.deltaTime;
-            float progress = elapsedTime / slideDownDuration;
-            float curveValue = slideDownCurve.Evaluate(progress);
+            float progress = elapsedTime / slideDuration;
+            float curveValue = slideCurve.Evaluate(progress);
             
             bottomSheetRect.anchoredPosition = Vector2.Lerp(startPos, endPos, curveValue);
             
@@ -207,7 +279,7 @@ public class BottomSheetManager : MonoBehaviour
         }
         
         isVisible = false;
-        Debug.Log("[BottomSheetManager] Bottom sheet slide down completed");
+        Debug.Log("[BottomSheetManager] Bottom sheet slide out to left completed");
     }
     
     public void CloseBottomSheet()
@@ -221,35 +293,41 @@ public class BottomSheetManager : MonoBehaviour
                 Debug.Log("[BottomSheetManager] Reset highlight when closing bottom sheet");
             }
             
-            StartCoroutine(SlideDown());
+            StartCoroutine(SlideOut());
             Debug.Log("[BottomSheetManager] Bottom sheet closed by user");
+            
+            // Notify NavigationUIManager to show joysticks
+            if (navigationUIManager != null)
+            {
+                navigationUIManager.OnBottomSheetClosed();
+            }
         }
     }
     
     void OnHighlightButtonClicked()
     {
-        if (currentBuilding != null)
-        {
-            Debug.Log($"[BottomSheetManager] Highlight button clicked for: {currentBuilding.name}");
+        // Use the current sidebar button handler (set when showing building details)
+        SidebarButtonHandler handlerToUse = currentSidebarButtonHandler != null 
+            ? currentSidebarButtonHandler 
+            : sidebarButtonHandler;
             
-            if (highlightManager != null)
+        if (handlerToUse != null)
+        {
+            Debug.Log($"[BottomSheetManager] Highlight button clicked for: {currentBuilding?.name}");
+            
+            // Ensure the handler's GameObject is active before calling (coroutines need active GameObjects)
+            if (handlerToUse.gameObject.activeInHierarchy)
             {
-                // Find the building GameObject
-                GameObject buildingObject = FindBuildingObject(currentBuilding);
-                if (buildingObject != null)
-                {
-                    highlightManager.HighlightBuilding(buildingObject);
-                    Debug.Log($"[BottomSheetManager] Highlighting building object: {buildingObject.name}");
-                }
-                else
-                {
-                    Debug.LogWarning($"[BottomSheetManager] Could not find GameObject for building: {currentBuilding.name}");
-                }
+                handlerToUse.StartHighlightGlow();
             }
             else
             {
-                Debug.LogWarning("[BottomSheetManager] BuildingHighlightManager not assigned!");
+                Debug.LogWarning($"[BottomSheetManager] Cannot start glow - SidebarButtonHandler GameObject '{handlerToUse.gameObject.name}' is inactive!");
             }
+        }
+        else
+        {
+            Debug.LogWarning("[BottomSheetManager] Cannot highlight - SidebarButtonHandler not assigned!");
         }
     }
     
@@ -298,6 +376,19 @@ public class BottomSheetManager : MonoBehaviour
             {
                 Debug.LogWarning("[BottomSheetManager] CameraMovementController not assigned!");
             }
+        }
+    }
+    
+    void OnEnterInsideButtonClicked()
+    {
+        if (currentBuilding != null && buildingEntrySystem != null)
+        {
+            Debug.Log($"[BottomSheetManager] Enter Inside button clicked for: {currentBuilding.name}");
+            buildingEntrySystem.OnEnterInsideButtonClicked(currentBuilding);
+        }
+        else
+        {
+            Debug.LogWarning("[BottomSheetManager] Cannot enter building - building data or entry system is null!");
         }
     }
     

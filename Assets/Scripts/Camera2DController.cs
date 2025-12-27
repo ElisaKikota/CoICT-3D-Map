@@ -6,8 +6,21 @@ public class Camera2DController : MonoBehaviour
     public float zoomSpeed = 5f;
     public float minZoom = 10f;
     public float maxZoom = 60f;
+    
+    [Header("Boundary Settings")]
+    [Tooltip("Reference to BoundaryController for movement limits. If null, will search for it.")]
+    public BoundaryController boundaryController;
 
     private Vector3 lastMousePos;
+
+    void Start()
+    {
+        // Find boundary controller if not assigned
+        if (boundaryController == null)
+        {
+            boundaryController = FindFirstObjectByType<BoundaryController>();
+        }
+    }
 
     void Update()
     {
@@ -17,7 +30,19 @@ public class Camera2DController : MonoBehaviour
         {
             Vector3 delta = Input.mousePosition - lastMousePos;
             delta *= panSpeed * Time.deltaTime;
-            transform.Translate(-delta.x, 0, -delta.y, Space.World);
+            Vector3 newPosition = transform.position;
+            newPosition += new Vector3(-delta.x, 0, -delta.y);
+            
+            // Clamp position within boundary if boundary controller is available
+            // Only clamp X and Z for 2D mode (Y stays fixed at 180)
+            if (boundaryController != null && boundaryController.exteriorBoundary != null)
+            {
+                Vector3 clamped = boundaryController.ClampToExteriorBoundary(newPosition);
+                // Preserve Y position (180 for 2D mode) when clamping
+                newPosition = new Vector3(clamped.x, newPosition.y, clamped.z);
+            }
+            
+            transform.position = newPosition;
             lastMousePos = Input.mousePosition;
         }
 

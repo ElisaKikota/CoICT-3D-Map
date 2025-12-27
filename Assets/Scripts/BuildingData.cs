@@ -19,6 +19,16 @@ public class BuildingData
     [Tooltip("Door objects that should glow when building is highlighted")]
     public GameObject[] doorObjects;
     
+    [Header("Enter Building Settings (Walk Mode)")]
+    [Tooltip("Camera position when Enter Building button is pressed (looking at door in walk mode)")]
+    public Vector3 enterBuildingCameraPosition;
+    
+    [Tooltip("Camera rotation when Enter Building button is pressed (looking at door in walk mode)")]
+    public Vector3 enterBuildingCameraRotation;
+    
+    [Tooltip("Features text for the building (e.g., 'Contains: X, Y, Z')")]
+    public string features = "";
+    
     public GameObject buildingObject;
     public bool isHighlighted;
     

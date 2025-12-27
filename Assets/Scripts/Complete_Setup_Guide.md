@@ -302,3 +302,5 @@ A helper script will be created to adjust UI elements based on screen size.
 
 Good luck with your project! 🚀
 
+
+

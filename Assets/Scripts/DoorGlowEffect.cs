@@ -31,7 +31,7 @@ public class DoorGlowEffect : MonoBehaviour
     
     private Material glowMaterial;
     private Material[] originalMaterials;
-    private Material[] originalAdditionalMaterials;
+    private Material[][] originalAdditionalMaterials;
     private bool isGlowing = false;
     private Coroutine glowCoroutine;
     
@@ -197,4 +197,5 @@ public class DoorGlowEffect : MonoBehaviour
         }
     }
 }
+
 
