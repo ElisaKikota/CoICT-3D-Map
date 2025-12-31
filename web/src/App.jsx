@@ -223,19 +223,27 @@ function App() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        width: '100%',
+        height: '100%'
       }}>
         <iframe
           ref={iframeRef}
           title="CoICT 3D Map"
           src="/unity/index.html"
           style={{
-            width: '100%',
-            height: '100%',
+            width: '100vw',
+            height: '100vh',
+            maxWidth: '100%',
+            maxHeight: '100%',
+            aspectRatio: '1080 / 1920',
+            objectFit: 'contain',
             border: 'none',
             display: 'block'
           }}
+          allow="fullscreen; autoplay; camera; microphone; gamepad"
           allowFullScreen
+          sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation"
         />
       </div>
     </div>
