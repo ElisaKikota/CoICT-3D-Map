@@ -15,6 +15,7 @@ public class CameraModeController : MonoBehaviour
     public GameObject joystickContainer;      // Canvas/JoystickContainer
     public JoystickManager joystickManager;   // Assign JoystickManager
     public ZoomButtonManager zoomButtonManager; // Assign ZoomButtonManager
+    public NorthIndicatorManager northIndicatorManager; // Assign NorthIndicatorManager
     
     [Header("Sidebar")]
     public GameObject sidebar;                // Sidebar GameObject (renamed from AutocompleteDropdown)
@@ -155,14 +156,18 @@ public class CameraModeController : MonoBehaviour
         {
             camera2DController.enabled = (mode == TourMode.Mode2D);
             
-            // Set camera height to 180 when entering 2D mode
+            // Set camera height to 180 and use perspective mode (like drone/walk modes) when entering 2D mode
             if (mode == TourMode.Mode2D && mainCamera != null)
             {
+                // Ensure camera is in perspective mode (same as drone/walk modes)
+                mainCamera.orthographic = false;
+                
                 Vector3 currentPosition = mainCamera.transform.position;
                 Vector3 currentRotation = mainCamera.transform.eulerAngles;
                 StartCoroutine(SmoothMoveTo(new Vector3(currentPosition.x, 180f, currentPosition.z)));
-                StartCoroutine(SmoothRotateTo(90f, currentRotation.y, 0f));
-                Debug.Log($"[CameraModeController] Smoothly moving camera to height 180 and rotating to (90, Y, 0) for 2D mode");
+                // Rotate to 90 degrees X (looking down), 0 degrees Y (reset rotation), 0 degrees Z
+                StartCoroutine(SmoothRotateTo(90f, 0f, 0f));
+                Debug.Log($"[CameraModeController] Smoothly moving camera to height 180 and rotating to (90, 0, 0) for 2D mode. Current Y rotation: {currentRotation.y}, Target Y rotation: 0");
             }
         }
         
@@ -248,6 +253,18 @@ public class CameraModeController : MonoBehaviour
         else
         {
             Debug.LogWarning("[CameraModeController] ZoomButtonManager is null!");
+        }
+
+        // North indicator visible only in 2D mode
+        if (northIndicatorManager != null)
+        {
+            bool showNorthIndicator = (mode == TourMode.Mode2D);
+            northIndicatorManager.SetVisible(showNorthIndicator);
+            Debug.Log($"[CameraModeController] North indicator active: {showNorthIndicator}");
+        }
+        else
+        {
+            Debug.LogWarning("[CameraModeController] NorthIndicatorManager is null!");
         }
 
         // Notify JoystickManager of mode change
@@ -413,35 +430,46 @@ public class CameraModeController : MonoBehaviour
     // Update fog settings based on camera mode
     private void UpdateFogForMode(TourMode mode)
     {
-        if (!enableFog) return;
-        
         switch (mode)
         {
             case TourMode.Mode2D:
-                // 2D mode: Longer visibility for overview
-                RenderSettings.fogStartDistance = fogStartDistance * 2f;
-                RenderSettings.fogEndDistance = fogEndDistance * 2f;
-                Debug.Log("[CameraModeController] 2D mode fog - Extended visibility");
+                // 2D mode: Disable fog completely
+                RenderSettings.fog = false;
+                Debug.Log("[CameraModeController] 2D mode - Fog disabled");
                 break;
                 
             case TourMode.Drone:
-                // Drone mode: Medium visibility
-                RenderSettings.fogStartDistance = fogStartDistance;
-                RenderSettings.fogEndDistance = fogEndDistance;
-                Debug.Log("[CameraModeController] Drone mode fog - Standard visibility");
+                // Drone mode: Enable fog with medium visibility
+                if (enableFog)
+                {
+                    RenderSettings.fog = true;
+                    RenderSettings.fogStartDistance = fogStartDistance;
+                    RenderSettings.fogEndDistance = fogEndDistance;
+                    ForceFogKeywords();
+                    Debug.Log("[CameraModeController] Drone mode fog - Standard visibility");
+                }
+                else
+                {
+                    RenderSettings.fog = false;
+                }
                 break;
                 
             case TourMode.Walk:
-                // Walk mode: Shorter visibility for ground-level view
-                RenderSettings.fogStartDistance = fogStartDistance * 0.5f;
-                RenderSettings.fogEndDistance = fogEndDistance * 0.5f;
-                Debug.Log("[CameraModeController] Walk mode fog - Reduced visibility");
+                // Walk mode: Enable fog with shorter visibility for ground-level view
+                if (enableFog)
+                {
+                    RenderSettings.fog = true;
+                    RenderSettings.fogStartDistance = fogStartDistance * 0.5f;
+                    RenderSettings.fogEndDistance = fogEndDistance * 0.5f;
+                    ForceFogKeywords();
+                    Debug.Log("[CameraModeController] Walk mode fog - Reduced visibility");
+                }
+                else
+                {
+                    RenderSettings.fog = false;
+                }
                 break;
         }
-
-        // Ensure fog remains enabled and keywords are set after mode switches
-        RenderSettings.fog = true;
-        ForceFogKeywords();
     }
 
     // Some Android builds can strip fog variants or disable keywords. Nudge shader keywords at runtime.

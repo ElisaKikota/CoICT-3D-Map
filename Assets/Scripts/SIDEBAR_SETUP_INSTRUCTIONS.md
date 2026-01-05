@@ -84,3 +84,11 @@ You can adjust the sidebar animation in the **Sidebar Animation** section:
 
 
 
+
+
+
+
+
+
+
+

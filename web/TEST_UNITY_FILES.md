@@ -25,3 +25,11 @@ If `_redirects` doesn't work, we might need to:
 2. Only redirect specific routes
 3. Or use a different approach
 
+
+
+
+
+
+
+
+

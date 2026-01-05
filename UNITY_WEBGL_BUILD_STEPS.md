@@ -176,3 +176,11 @@ After copying the files:
 2. Test locally: `npm run preview`
 3. Deploy to Netlify (see README_BUILD.md)
 
+
+
+
+
+
+
+
+

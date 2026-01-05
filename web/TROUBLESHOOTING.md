@@ -110,3 +110,11 @@ Copy-Item -Path "Builds\CoICT3DMap\Build\*" -Destination "web\public\unity\Build
 2. Check the Network tab - which files are failing?
 3. Verify the build output in `web/dist/` matches expected structure
 
+
+
+
+
+
+
+
+
