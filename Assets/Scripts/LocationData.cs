@@ -13,6 +13,7 @@ public class LocationData : BuildingData
     public LocationType type;
     
     [Header("Hierarchy")]
+    [SerializeReference]
     public List<LocationData> subLocations = new List<LocationData>();
     public string parentLocationId; // Reference to parent location if nested
     

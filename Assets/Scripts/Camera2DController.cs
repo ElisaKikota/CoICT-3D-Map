@@ -119,14 +119,14 @@ public class Camera2DController : MonoBehaviour
             }
             else
             {
-                // Calculate the difference in distance from last frame
-                float deltaDistance = lastPinchDistance - currentDistance;
+                // Calculate the difference in distance from last frame (inverted for correct zoom direction)
+                float deltaDistance = currentDistance - lastPinchDistance;
                 
                 // Apply zoom by changing camera height (pinch in = zoom in = lower height, pinch out = zoom out = higher height)
-                // When fingers move closer (pinch in): currentDistance < lastPinchDistance, so deltaDistance is positive
-                // To zoom in, we decrease height, so we subtract (positive deltaDistance decreases height)
-                // When fingers move apart (pinch out): currentDistance > lastPinchDistance, so deltaDistance is negative
-                // To zoom out, we increase height, so we subtract negative deltaDistance (which adds)
+                // When fingers move closer (pinch in): currentDistance < lastPinchDistance, so deltaDistance is negative
+                // To zoom in, we decrease height, so we subtract negative deltaDistance (which adds to decrease height)
+                // When fingers move apart (pinch out): currentDistance > lastPinchDistance, so deltaDistance is positive
+                // To zoom out, we increase height, so we subtract positive deltaDistance (which subtracts, increasing height)
                 if (cam != null)
                 {
                     Vector3 newPosition = transform.position;

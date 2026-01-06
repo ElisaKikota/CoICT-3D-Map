@@ -46,7 +46,6 @@ public class Highlighter : MonoBehaviour
     private MaterialPropertyBlock propertyBlock;
     private Material[] originalMaterials; // Store original materials to preserve color
     private Color baseColor; // Store the base color of the material
-    private bool isSpriteRenderer = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -131,13 +130,11 @@ public class Highlighter : MonoBehaviour
         // Store original materials and base color
         if (currentRenderer is SpriteRenderer spriteRenderer)
         {
-            isSpriteRenderer = true;
             baseColor = spriteRenderer.color;
             Debug.Log($"[Highlighter] SpriteRenderer found, base color: {baseColor}, alpha: {baseColor.a}");
         }
         else
         {
-            isSpriteRenderer = false;
             // Store original materials
             if (currentRenderer.materials != null && currentRenderer.materials.Length > 0)
             {

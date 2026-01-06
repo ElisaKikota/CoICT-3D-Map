@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum TourMode { Mode2D, Drone, Walk }
+public enum TourMode { Mode2D, Drone, Walk, Mode3D }
 
 public class CameraModeController : MonoBehaviour
 {
@@ -16,6 +16,7 @@ public class CameraModeController : MonoBehaviour
     public JoystickManager joystickManager;   // Assign JoystickManager
     public ZoomButtonManager zoomButtonManager; // Assign ZoomButtonManager
     public NorthIndicatorManager northIndicatorManager; // Assign NorthIndicatorManager
+    public HighlighterLabelManager highlighterLabelManager; // Assign HighlighterLabelManager (for label display)
     
     [Header("Sidebar")]
     public GameObject sidebar;                // Sidebar GameObject (renamed from AutocompleteDropdown)
@@ -29,12 +30,15 @@ public class CameraModeController : MonoBehaviour
     public Camera2DController camera2DController; // MainCamera Camera2DController (optional)
     public DroneController droneController;       // Assign DroneController
     public WalkController walkController;         // Assign WalkController
+    public Camera3DController camera3DController; // Assign Camera3DController (for 3D mode)
 
     [Header("Buttons (assign Button components)")]
     public Button btn2D;       // assign Btn2D Button component
     public Button btnDrone;    // assign BtnDrone Button component
     public Button btnWalk;     // assign BtnWalk Button component
+    public Button btn3D;       // assign Btn3D Button component
     public Button eyeButton;   // assign EyeButton Button component
+    public Button labelButton; // assign LabelButton Button component (for toggling highlighter labels)
     
     [Header("Button Visual States")]
     public Color activeButtonColor = new Color(0.5f, 0.5f, 0.5f, 1f);  // Dimmed color for active button
@@ -56,6 +60,10 @@ public class CameraModeController : MonoBehaviour
 
     [HideInInspector]
     public TourMode currentMode;
+    
+    // First-time initialization flags
+    private bool firstTime2D = true;
+    private bool firstTime3D = true;
     
     // Sidebar state
     private bool isSidebarOpen = false;
@@ -99,6 +107,16 @@ public class CameraModeController : MonoBehaviour
             eyeButton.onClick.RemoveAllListeners();
             eyeButton.onClick.AddListener(() => OnEyeButton());
         }
+        if (btn3D != null)
+        {
+            btn3D.onClick.RemoveAllListeners();
+            btn3D.onClick.AddListener(() => On3DButton());
+        }
+        if (labelButton != null)
+        {
+            labelButton.onClick.RemoveAllListeners();
+            labelButton.onClick.AddListener(() => OnLabelButton());
+        }
         
         // Setup building icon button for sidebar toggle
         if (buildingIconButton != null)
@@ -111,18 +129,10 @@ public class CameraModeController : MonoBehaviour
         if (camera2DController != null) camera2DController.enabled = false;
         if (droneController != null) droneController.enabled = false;
         if (walkController != null) walkController.enabled = false;
+        if (camera3DController != null) camera3DController.enabled = false;
 
         // Ensure joystick container starts hidden if set
         if (joystickContainer != null) joystickContainer.SetActive(false);
-
-        // Set initial 2D camera rotation and height
-        if (mainCamera != null)
-        {
-            Vector3 currentPosition = mainCamera.transform.position;
-            mainCamera.transform.position = new Vector3(currentPosition.x, 180f, currentPosition.z);
-            mainCamera.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-            Debug.Log("[CameraModeController] Set initial 2D camera height to 180 and rotation to 90 degrees down");
-        }
 
         // Initialize fog settings
         SetupFog();
@@ -130,7 +140,7 @@ public class CameraModeController : MonoBehaviour
         // Initialize sidebar positions
         InitializeSidebar();
 
-        // Force initial mode to 2D
+        // Force initial mode to 2D (will set initial position in SwitchMode)
         SwitchMode(TourMode.Mode2D);
 
         Debug.Log("[CameraModeController] Initialized. CurrentMode = " + currentMode);
@@ -164,10 +174,25 @@ public class CameraModeController : MonoBehaviour
                 
                 Vector3 currentPosition = mainCamera.transform.position;
                 Vector3 currentRotation = mainCamera.transform.eulerAngles;
-                StartCoroutine(SmoothMoveTo(new Vector3(currentPosition.x, 180f, currentPosition.z)));
-                // Rotate to 90 degrees X (looking down), 0 degrees Y (reset rotation), 0 degrees Z
-                StartCoroutine(SmoothRotateTo(90f, 0f, 0f));
-                Debug.Log($"[CameraModeController] Smoothly moving camera to height 180 and rotating to (90, 0, 0) for 2D mode. Current Y rotation: {currentRotation.y}, Target Y rotation: 0");
+                
+                // First time entering 2D mode - set specific position (don't move, just set it)
+                if (firstTime2D)
+                {
+                    Vector3 initial2DPosition = new Vector3(8.36f, 350f, -61.98f);
+                    mainCamera.transform.position = initial2DPosition;
+                    mainCamera.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+                    firstTime2D = false;
+                    Debug.Log($"[CameraModeController] First time 2D mode - Set initial position: {initial2DPosition}");
+                    // Don't do any smooth movement - just stay at initial position
+                }
+                else
+                {
+                    // Normal behavior - smooth movement to height 180
+                    StartCoroutine(SmoothMoveTo(new Vector3(currentPosition.x, 180f, currentPosition.z)));
+                    // Rotate to 90 degrees X (looking down), 0 degrees Y (reset rotation), 0 degrees Z
+                    StartCoroutine(SmoothRotateTo(90f, 0f, 0f));
+                    Debug.Log($"[CameraModeController] Smoothly moving camera to height 180 and rotating to (90, 0, 0) for 2D mode. Current Y rotation: {currentRotation.y}, Target Y rotation: 0");
+                }
             }
         }
         
@@ -224,6 +249,39 @@ public class CameraModeController : MonoBehaviour
             StartCoroutine(SmoothRotateTo(0f, currentRotation.y, 0f));
             Debug.Log($"[CameraModeController] Smoothly moving camera to height -1 and rotating to 0 degrees for walk mode");
         }
+        
+        // 3D mode logic - set camera rotation and enable controller
+        if (camera3DController != null)
+        {
+            camera3DController.enabled = (mode == TourMode.Mode3D);
+            Debug.Log($"[CameraModeController] Camera3DController enabled: {camera3DController.enabled}");
+            
+            if (mode == TourMode.Mode3D && mainCamera != null)
+            {
+                Vector3 currentPosition = mainCamera.transform.position;
+                
+                // First time entering 3D mode - smoothly move to specific position
+                if (firstTime3D)
+                {
+                    Vector3 initial3DPosition = new Vector3(112f, 50f, -135f);
+                    StartCoroutine(SmoothMoveTo(initial3DPosition));
+                    StartCoroutine(SmoothRotateTo(30f, 225f, 0f));
+                    firstTime3D = false;
+                    Debug.Log($"[CameraModeController] First time 3D mode - Smoothly moving to initial position: {initial3DPosition}");
+                }
+                else
+                {
+                    // Normal behavior - set Y to 50, keep X/Z, and rotate to x=30, y=225, z=0 for 3D mode
+                    StartCoroutine(SmoothMoveTo(new Vector3(currentPosition.x, 50f, currentPosition.z)));
+                    StartCoroutine(SmoothRotateTo(30f, 225f, 0f));
+                    Debug.Log($"[CameraModeController] Smoothly moving camera to height 50 and rotating to (30, 225, 0) for 3D mode");
+                }
+            }
+        }
+        else if (mode == TourMode.Mode3D)
+        {
+            Debug.LogWarning("[CameraModeController] Camera3DController not assigned but Mode3D selected!");
+        }
 
         // Reset joystick visibility state when switching to 2D mode
         if (mode == TourMode.Mode2D)
@@ -231,10 +289,10 @@ public class CameraModeController : MonoBehaviour
             joysticksVisible = true; // Reset to visible for when switching back to drone/walk
         }
         
-        // Joysticks visible only in Drone/Walk, and only if joysticksVisible is true
+        // Joysticks visible only in Drone/Walk (NOT in 3D mode), and only if joysticksVisible is true
         if (joystickContainer != null)
         {
-            bool showJoysticks = (mode != TourMode.Mode2D) && joysticksVisible;
+            bool showJoysticks = (mode == TourMode.Drone || mode == TourMode.Walk) && joysticksVisible;
             joystickContainer.SetActive(showJoysticks);
             Debug.Log($"[CameraModeController] Joystick container active: {showJoysticks} (mode: {mode}, joysticksVisible: {joysticksVisible})");
         }
@@ -282,9 +340,19 @@ public class CameraModeController : MonoBehaviour
             Debug.LogWarning("[CameraModeController] JoystickManager is null!");
         }
 
-        // Eye button visible only in Drone/Walk
+        // Eye button visible only in Drone/Walk (NOT in 3D mode)
         if (eyeButton != null)
-            eyeButton.gameObject.SetActive(mode != TourMode.Mode2D);
+            eyeButton.gameObject.SetActive(mode == TourMode.Drone || mode == TourMode.Walk);
+        
+        // Labels visible by default in 2D, Drone, and 3D modes
+        if (highlighterLabelManager != null)
+        {
+            bool labelsShouldBeVisible = (mode == TourMode.Mode2D || mode == TourMode.Drone || mode == TourMode.Mode3D);
+            highlighterLabelManager.SetLabelsVisible(labelsShouldBeVisible);
+            // Update label rotations when mode changes
+            highlighterLabelManager.UpdateLabelRotations(mode);
+            Debug.Log($"[CameraModeController] Highlighter labels visible: {labelsShouldBeVisible} (mode: {mode})");
+        }
             
         // Update button visual states
         UpdateButtonVisuals(mode);
@@ -318,6 +386,13 @@ public class CameraModeController : MonoBehaviour
             btnWalk.colors = colors;
         }
         
+        if (btn3D != null)
+        {
+            var colors = btn3D.colors;
+            colors.normalColor = normalButtonColor;
+            btn3D.colors = colors;
+        }
+        
         // Dim the active button
         switch (mode)
         {
@@ -347,6 +422,15 @@ public class CameraModeController : MonoBehaviour
                     btnWalk.colors = colors;
                 }
                 break;
+                
+            case TourMode.Mode3D:
+                if (btn3D != null)
+                {
+                    var colors = btn3D.colors;
+                    colors.normalColor = activeButtonColor;
+                    btn3D.colors = colors;
+                }
+                break;
         }
     }
 
@@ -354,6 +438,7 @@ public class CameraModeController : MonoBehaviour
     public void On2DButton() => SwitchMode(TourMode.Mode2D);
     public void OnDroneButton() => SwitchMode(TourMode.Drone);
     public void OnWalkButton() => SwitchMode(TourMode.Walk);
+    public void On3DButton() => SwitchMode(TourMode.Mode3D);
     
     // Building icon button functionality - toggles sidebar
     public void OnBuildingIconButton()
@@ -377,6 +462,21 @@ public class CameraModeController : MonoBehaviour
                 joystickContainer.SetActive(joysticksVisible);
                 Debug.Log($"[CameraModeController] Joysticks now {(joysticksVisible ? "visible" : "hidden")}");
             }
+        }
+    }
+    
+    // Label button functionality - toggles highlighter label visibility
+    public void OnLabelButton()
+    {
+        Debug.Log("[CameraModeController] Label button clicked - toggling highlighter label visibility");
+        
+        if (highlighterLabelManager != null)
+        {
+            highlighterLabelManager.ToggleLabels();
+        }
+        else
+        {
+            Debug.LogWarning("[CameraModeController] HighlighterLabelManager not assigned!");
         }
     }
 
@@ -463,6 +563,22 @@ public class CameraModeController : MonoBehaviour
                     RenderSettings.fogEndDistance = fogEndDistance * 0.5f;
                     ForceFogKeywords();
                     Debug.Log("[CameraModeController] Walk mode fog - Reduced visibility");
+                }
+                else
+                {
+                    RenderSettings.fog = false;
+                }
+                break;
+                
+            case TourMode.Mode3D:
+                // 3D mode: Enable fog with medium visibility (similar to Drone mode)
+                if (enableFog)
+                {
+                    RenderSettings.fog = true;
+                    RenderSettings.fogStartDistance = fogStartDistance;
+                    RenderSettings.fogEndDistance = fogEndDistance;
+                    ForceFogKeywords();
+                    Debug.Log("[CameraModeController] 3D mode fog - Standard visibility");
                 }
                 else
                 {
