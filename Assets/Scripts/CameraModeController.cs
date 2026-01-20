@@ -64,6 +64,7 @@ public class CameraModeController : MonoBehaviour
     // First-time initialization flags
     private bool firstTime2D = true;
     private bool firstTime3D = true;
+    private bool isFirstTime2DInitializing = false; // Flag to prevent movement during first-time setup
     
     // Sidebar state
     private bool isSidebarOpen = false;
@@ -164,35 +165,60 @@ public class CameraModeController : MonoBehaviour
         // Enable/disable controllers based on mode
         if (camera2DController != null)
         {
-            camera2DController.enabled = (mode == TourMode.Mode2D);
-            
-            // Set camera height to 180 and use perspective mode (like drone/walk modes) when entering 2D mode
+            // Set camera position and use perspective mode when entering 2D mode
             if (mode == TourMode.Mode2D && mainCamera != null)
             {
-                // Ensure camera is in perspective mode (same as drone/walk modes)
-                mainCamera.orthographic = false;
-                
-                Vector3 currentPosition = mainCamera.transform.position;
-                Vector3 currentRotation = mainCamera.transform.eulerAngles;
-                
-                // First time entering 2D mode - set specific position (don't move, just set it)
-                if (firstTime2D)
+                // First time entering 2D mode - set specific position at height 350 (don't move, just set it)
+                if (firstTime2D || isFirstTime2DInitializing)
                 {
                     Vector3 initial2DPosition = new Vector3(8.36f, 350f, -61.98f);
+                    // Stop any coroutines that might be moving the camera
+                    StopAllCoroutines();
+                    // Set flag to prevent any movement during initialization
+                    isFirstTime2DInitializing = true;
+                    // Set position directly - no smooth movement on first time
                     mainCamera.transform.position = initial2DPosition;
                     mainCamera.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+                    // Ensure camera is in perspective mode
+                    mainCamera.orthographic = false;
+                    // Mark as no longer first time
                     firstTime2D = false;
-                    Debug.Log($"[CameraModeController] First time 2D mode - Set initial position: {initial2DPosition}");
-                    // Don't do any smooth movement - just stay at initial position
+                    // Enable controller AFTER setting position to prevent any interference
+                    camera2DController.enabled = true;
+                    Debug.Log($"[CameraModeController] First time 2D mode - Set initial position at height 350: {initial2DPosition}. Controller enabled after position set.");
+                    // Clear the initialization flag after a frame to allow normal operation
+                    StartCoroutine(ClearFirstTime2DFlag());
                 }
                 else
                 {
-                    // Normal behavior - smooth movement to height 180
-                    StartCoroutine(SmoothMoveTo(new Vector3(currentPosition.x, 180f, currentPosition.z)));
-                    // Rotate to 90 degrees X (looking down), 0 degrees Y (reset rotation), 0 degrees Z
-                    StartCoroutine(SmoothRotateTo(90f, 0f, 0f));
-                    Debug.Log($"[CameraModeController] Smoothly moving camera to height 180 and rotating to (90, 0, 0) for 2D mode. Current Y rotation: {currentRotation.y}, Target Y rotation: 0");
+                    // Enable controller first for normal behavior
+                    camera2DController.enabled = true;
+                    // Ensure camera is in perspective mode (same as drone/walk modes)
+                    mainCamera.orthographic = false;
+                    
+                    Vector3 currentPosition = mainCamera.transform.position;
+                    Vector3 currentRotation = mainCamera.transform.eulerAngles;
+                    
+                    // Only move to 180 if we're not at the first-time position (350)
+                    // This prevents movement if camera is already at the correct starting position
+                    if (Mathf.Abs(currentPosition.y - 350f) > 0.1f)
+                    {
+                        // Normal behavior - smooth movement to height 180
+                        StartCoroutine(SmoothMoveTo(new Vector3(currentPosition.x, 180f, currentPosition.z)));
+                        // Rotate to 90 degrees X (looking down), 0 degrees Y (reset rotation), 0 degrees Z
+                        StartCoroutine(SmoothRotateTo(90f, 0f, 0f));
+                        Debug.Log($"[CameraModeController] Smoothly moving camera to height 180 and rotating to (90, 0, 0) for 2D mode. Current Y rotation: {currentRotation.y}, Target Y rotation: 0");
+                    }
+                    else
+                    {
+                        Debug.Log($"[CameraModeController] Camera already at first-time position (350), skipping movement to 180");
+                    }
                 }
+            }
+            else
+            {
+                // Not 2D mode - disable controller
+                camera2DController.enabled = false;
             }
         }
         
@@ -344,13 +370,20 @@ public class CameraModeController : MonoBehaviour
         if (eyeButton != null)
             eyeButton.gameObject.SetActive(mode == TourMode.Drone || mode == TourMode.Walk);
         
-        // Labels visible by default in 2D, Drone, and 3D modes
+        // Label button visible only in 2D and 3D modes (NOT in Drone/Walk)
+        if (labelButton != null)
+            labelButton.gameObject.SetActive(mode == TourMode.Mode2D || mode == TourMode.Mode3D);
+        
+        // Labels visible only in 2D and 3D modes (NOT in Drone/Walk)
         if (highlighterLabelManager != null)
         {
-            bool labelsShouldBeVisible = (mode == TourMode.Mode2D || mode == TourMode.Drone || mode == TourMode.Mode3D);
+            bool labelsShouldBeVisible = (mode == TourMode.Mode2D || mode == TourMode.Mode3D);
             highlighterLabelManager.SetLabelsVisible(labelsShouldBeVisible);
-            // Update label rotations when mode changes
-            highlighterLabelManager.UpdateLabelRotations(mode);
+            // Update label rotations when mode changes (only if labels are visible)
+            if (labelsShouldBeVisible)
+            {
+                highlighterLabelManager.UpdateLabelRotations(mode);
+            }
             Debug.Log($"[CameraModeController] Highlighter labels visible: {labelsShouldBeVisible} (mode: {mode})");
         }
             
@@ -480,6 +513,15 @@ public class CameraModeController : MonoBehaviour
         }
     }
 
+    // Clear first-time 2D flag after initialization
+    private System.Collections.IEnumerator ClearFirstTime2DFlag()
+    {
+        // Wait a few frames to ensure initialization is complete
+        yield return new WaitForSeconds(0.1f);
+        isFirstTime2DInitializing = false;
+        Debug.Log("[CameraModeController] First-time 2D initialization complete, flag cleared");
+    }
+    
     // Smooth transition coroutines
     private System.Collections.IEnumerator SmoothRotateTo(float x, float y, float z)
     {

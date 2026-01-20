@@ -125,3 +125,6 @@ Copy-Item -Path "Builds\CoICT3DMap\Build\*" -Destination "web\public\unity\Build
 
 
 
+
+
+

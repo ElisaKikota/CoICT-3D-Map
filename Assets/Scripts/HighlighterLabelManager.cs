@@ -30,8 +30,10 @@ public class HighlighterLabelManager : MonoBehaviour
     [Tooltip("Label text size")]
     public float labelFontSize = 30f;
     
-    // Force font size to always be 6
-    private const float FORCED_FONT_SIZE = 6f;
+    // Force font size - using larger size for better quality with legacy Text
+    // Canvas will be scaled down to compensate, giving us crisp rendering
+    private const float FORCED_FONT_SIZE = 600f; // Large size for quality
+    private const float CANVAS_SCALE = 0.01f; // Scale canvas down to compensate
     
     [Tooltip("Whether labels are visible by default")]
     public bool labelsVisibleByDefault = true;
@@ -233,6 +235,9 @@ public class HighlighterLabelManager : MonoBehaviour
             // Use prefab if available
             labelObject = Instantiate(labelPrefab, labelPosition, Quaternion.identity);
             
+            // Scale canvas transform down for higher quality rendering
+            labelObject.transform.localScale = new Vector3(CANVAS_SCALE, CANVAS_SCALE, CANVAS_SCALE);
+            
             // Update Text component if it exists in prefab
             Text textComponent = labelObject.GetComponent<Text>();
             if (textComponent == null)
@@ -242,7 +247,7 @@ public class HighlighterLabelManager : MonoBehaviour
             if (textComponent != null)
             {
                 textComponent.text = labelText;
-                textComponent.fontSize = (int)FORCED_FONT_SIZE; // Always use 30
+                textComponent.fontSize = (int)FORCED_FONT_SIZE;
                 textComponent.color = labelColor;
                 textComponent.alignment = TextAnchor.MiddleCenter;
                 textComponent.horizontalOverflow = HorizontalWrapMode.Overflow;
@@ -264,6 +269,10 @@ public class HighlighterLabelManager : MonoBehaviour
             CanvasScaler scaler = labelObject.AddComponent<CanvasScaler>();
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
             scaler.scaleFactor = 1f;
+            
+            // Scale canvas transform down for higher quality rendering
+            // This makes the canvas render at higher resolution while maintaining same visual size
+            labelObject.transform.localScale = new Vector3(CANVAS_SCALE, CANVAS_SCALE, CANVAS_SCALE);
             
             // Create child GameObject for the text
             GameObject textObj = new GameObject("Text");
