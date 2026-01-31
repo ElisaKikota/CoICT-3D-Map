@@ -1,6 +1,10 @@
 # Unity WebGL files - serve with correct MIME types
-/unity/Build/*    /unity/Build/:splat   200
-/unity/*         /unity/:splat         200
+/unity/Build/CoICT3DMap.loader.js    /unity/Build/CoICT3DMap.loader.js   200
+/unity/Build/CoICT3DMap.framework.js  /unity/Build/CoICT3DMap.framework.js   200
+/unity/Build/CoICT3DMap.data          /unity/Build/CoICT3DMap.data   200
+/unity/Build/CoICT3DMap.wasm          /unity/Build/CoICT3DMap.wasm   200
+/unity/Build/*                        /unity/Build/:splat   200
+/unity/*                              /unity/:splat         200
 
 # React SPA routing - fallback to index.html for non-existent files
-/*               /index.html           200 
+/*                                    /index.html           200
