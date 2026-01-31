@@ -9,9 +9,26 @@ using UnityEngine.UI;
 /// </summary>
 public class HighlighterLabelManager : MonoBehaviour
 {
+    [System.Serializable]
+    public class LabelTarget
+    {
+        public GameObject target;
+        public string labelText;
+        public Vector3 positionOffset = new Vector3(0f, 7f, 0f);
+        public bool overrideRotation = false;
+        public Vector3 rotationEuler;
+    }
+
     [Header("Highlighter References")]
     [Tooltip("Parent GameObject containing all highlighter objects. If not assigned, will search for 'Highlighters' in scene.")]
     public GameObject allHighlightersParent;
+
+    [Header("Manual Label Targets")]
+    public List<LabelTarget> manualLabelTargets = new List<LabelTarget>();
+
+    [Header("Label Parenting")]
+    [Tooltip("Optional parent for all labels. If not assigned, labels will be parented to this GameObject to avoid being disabled with highlighters.")]
+    public Transform labelsRoot;
     
     [Header("Camera Mode Reference")]
     [Tooltip("Reference to CameraModeController to get current mode. If not assigned, will search for it.")]
@@ -48,6 +65,20 @@ public class HighlighterLabelManager : MonoBehaviour
     
     void Start()
     {
+        if (labelsRoot == null)
+        {
+            GameObject existing = GameObject.Find("HighlighterLabelsRoot");
+            if (existing != null)
+            {
+                labelsRoot = existing.transform;
+            }
+            else
+            {
+                GameObject root = new GameObject("HighlighterLabelsRoot");
+                labelsRoot = root.transform;
+            }
+        }
+
         // Find all highlighters parent if not assigned
         if (allHighlightersParent == null)
         {
@@ -64,11 +95,154 @@ public class HighlighterLabelManager : MonoBehaviour
             cameraModeController = FindFirstObjectByType<CameraModeController>();
         }
         
-        // Collect all highlighters (must be done first, but quickly)
-        CollectAllHighlighters();
-        
-        // Spread all expensive operations across frames to prevent freeze
-        StartCoroutine(InitializeLabelsCoroutine());
+        if (manualLabelTargets != null && manualLabelTargets.Count > 0)
+        {
+            StartCoroutine(InitializeManualLabelsCoroutine());
+        }
+        else
+        {
+            // Collect all highlighters (must be done first, but quickly)
+            CollectAllHighlighters();
+            
+            // Spread all expensive operations across frames to prevent freeze
+            StartCoroutine(InitializeLabelsCoroutine());
+        }
+    }
+
+    System.Collections.IEnumerator InitializeManualLabelsCoroutine()
+    {
+        isInitializing = true;
+        highlighterLabels.Clear();
+        cachedTopFaceHeights.Clear();
+
+        int processedThisFrame = 0;
+        const int maxPerFrame = 3;
+
+        foreach (var entry in manualLabelTargets)
+        {
+            if (entry == null || entry.target == null)
+            {
+                continue;
+            }
+
+            CreateManualLabelForTarget(entry);
+
+            processedThisFrame++;
+            if (processedThisFrame >= maxPerFrame)
+            {
+                processedThisFrame = 0;
+                yield return null;
+            }
+        }
+
+        labelsVisible = labelsVisibleByDefault;
+        SetLabelsVisible(labelsVisible);
+
+        isInitializing = false;
+
+        yield return null;
+
+        if (cameraModeController != null)
+        {
+            lastMode = cameraModeController.currentMode;
+        }
+        else
+        {
+            lastMode = TourMode.Mode2D;
+        }
+
+        UpdateLabelRotations(lastMode);
+        Debug.Log($"[HighlighterLabelManager] Manual initialization complete - labels: {highlighterLabels.Count}, mode: {lastMode}");
+    }
+
+    void CreateManualLabelForTarget(LabelTarget entry)
+    {
+        if (entry == null || entry.target == null) return;
+
+        string labelText = !string.IsNullOrEmpty(entry.labelText) ? entry.labelText : entry.target.name;
+        Vector3 labelPosition = entry.target.transform.position + entry.positionOffset;
+
+        GameObject labelObject;
+
+        if (labelPrefab != null)
+        {
+            labelObject = Instantiate(labelPrefab, labelPosition, Quaternion.identity);
+            labelObject.transform.localScale = new Vector3(CANVAS_SCALE, CANVAS_SCALE, CANVAS_SCALE);
+
+            Text textComponent = labelObject.GetComponent<Text>();
+            if (textComponent == null)
+            {
+                textComponent = labelObject.GetComponentInChildren<Text>();
+            }
+            if (textComponent != null)
+            {
+                textComponent.text = labelText;
+                textComponent.fontSize = (int)FORCED_FONT_SIZE;
+                textComponent.color = labelColor;
+                textComponent.alignment = TextAnchor.MiddleCenter;
+                textComponent.horizontalOverflow = HorizontalWrapMode.Overflow;
+                textComponent.verticalOverflow = VerticalWrapMode.Overflow;
+            }
+        }
+        else
+        {
+            labelObject = new GameObject($"Label_{entry.target.name}");
+            labelObject.transform.position = labelPosition;
+
+            Canvas canvas = labelObject.AddComponent<Canvas>();
+            canvas.renderMode = RenderMode.WorldSpace;
+            canvas.worldCamera = Camera.main;
+
+            CanvasScaler scaler = labelObject.AddComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
+            scaler.scaleFactor = 1f;
+
+            labelObject.transform.localScale = new Vector3(CANVAS_SCALE, CANVAS_SCALE, CANVAS_SCALE);
+
+            GameObject textObj = new GameObject("Text");
+            textObj.transform.SetParent(labelObject.transform);
+            textObj.transform.localPosition = Vector3.zero;
+            textObj.transform.localScale = Vector3.one;
+
+            Text textComponent = textObj.AddComponent<Text>();
+            textComponent.text = labelText;
+            textComponent.fontSize = (int)FORCED_FONT_SIZE;
+            textComponent.color = labelColor;
+            textComponent.alignment = TextAnchor.MiddleCenter;
+            textComponent.horizontalOverflow = HorizontalWrapMode.Overflow;
+            textComponent.verticalOverflow = VerticalWrapMode.Overflow;
+            textComponent.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        }
+
+        TourMode currentMode = TourMode.Mode2D;
+        if (cameraModeController != null)
+        {
+            currentMode = cameraModeController.currentMode;
+        }
+
+        // Rotation rules:
+        // - Mode3D: always force (0,225,0)
+        // - Mode2D: allow manual overrideRotation
+        // - Other modes: use default SetLabelRotation unless manual overrideRotation is desired
+        if (currentMode == TourMode.Mode3D)
+        {
+            labelObject.transform.rotation = Quaternion.Euler(0f, 225f, 0f);
+        }
+        else if (currentMode == TourMode.Mode2D && entry.overrideRotation)
+        {
+            labelObject.transform.rotation = Quaternion.Euler(entry.rotationEuler);
+        }
+        else
+        {
+            SetLabelRotation(labelObject, currentMode);
+        }
+
+        if (labelsRoot != null)
+        {
+            labelObject.transform.SetParent(labelsRoot, true);
+        }
+
+        highlighterLabels[entry.target] = labelObject;
     }
     
     /// <summary>
@@ -171,34 +345,32 @@ public class HighlighterLabelManager : MonoBehaviour
         {
             if (highlighter != null)
             {
-                // Check if highlighter has children
-                if (highlighter.transform.childCount > 0)
+                bool createdAny = false;
+                Transform[] descendants = highlighter.GetComponentsInChildren<Transform>(true);
+                foreach (Transform t in descendants)
                 {
-                    // Create a label for each child
-                    foreach (Transform child in highlighter.transform)
-                    {
-                        CreateLabelForHighlighter(child.gameObject, highlighter);
-                        processedThisFrame++;
-                        
-                        // Yield every few labels to prevent freeze
-                        if (processedThisFrame >= maxPerFrame)
-                        {
-                            processedThisFrame = 0;
-                            yield return null; // Wait one frame
-                        }
-                    }
-                }
-                else
-                {
-                    // No children, create label for the parent itself
-                    CreateLabelForHighlighter(highlighter, highlighter);
+                    if (t == null || t == highlighter.transform) continue;
+
+                    createdAny = true;
+                    CreateLabelForHighlighter(t.gameObject, highlighter);
                     processedThisFrame++;
                     
-                    // Yield every few labels to prevent freeze
                     if (processedThisFrame >= maxPerFrame)
                     {
                         processedThisFrame = 0;
-                        yield return null; // Wait one frame
+                        yield return null;
+                    }
+                }
+
+                if (!createdAny)
+                {
+                    CreateLabelForHighlighter(highlighter, highlighter);
+                    processedThisFrame++;
+
+                    if (processedThisFrame >= maxPerFrame)
+                    {
+                        processedThisFrame = 0;
+                        yield return null;
                     }
                 }
             }
@@ -293,17 +465,9 @@ public class HighlighterLabelManager : MonoBehaviour
             textComponent.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         }
         
-        // Keep label independent of highlighter's active state
-        // Parent to target object's parent if available, otherwise keep as child of target object
-        // (Labels will still work even when highlighter is inactive because we update position in Update)
-        if (targetObject.transform.parent != null)
+        if (labelsRoot != null)
         {
-            labelObject.transform.SetParent(targetObject.transform.parent, true);
-        }
-        else
-        {
-            // If no parent, keep as child of target object but it will still be positioned correctly in Update
-            labelObject.transform.SetParent(targetObject.transform, true);
+            labelObject.transform.SetParent(labelsRoot, true);
         }
         
         // Set initial rotation based on current mode (if available)
@@ -558,6 +722,8 @@ public class HighlighterLabelManager : MonoBehaviour
             lastMode = currentMode;
         }
         
+        bool usingManualTargets = manualLabelTargets != null && manualLabelTargets.Count > 0;
+
         // Only update positions for a few labels per frame to avoid freeze
         const int labelsPerFrame = 10; // Update max 10 labels per frame
         int processed = 0;
@@ -576,10 +742,31 @@ public class HighlighterLabelManager : MonoBehaviour
             
             if (targetObject == null || labelObject == null || !labelObject.activeSelf)
                 continue;
-            
-            // Update label position: Y position + 7 (as requested)
-            Vector3 targetPos = targetObject.transform.position;
-            labelObject.transform.position = new Vector3(targetPos.x, targetPos.y + 7f, targetPos.z);
+
+            if (usingManualTargets)
+            {
+                var entry = manualLabelTargets.Find(e => e != null && e.target == targetObject);
+                Vector3 offset = entry != null ? entry.positionOffset : new Vector3(0f, labelHeightOffset, 0f);
+                labelObject.transform.position = targetObject.transform.position + offset;
+
+                // Rotation rules:
+                // - Mode3D: always force (0,225,0)
+                // - Mode2D: allow manual overrideRotation
+                if (currentMode == TourMode.Mode3D)
+                {
+                    labelObject.transform.rotation = Quaternion.Euler(0f, 225f, 0f);
+                }
+                else if (currentMode == TourMode.Mode2D && entry != null && entry.overrideRotation)
+                {
+                    labelObject.transform.rotation = Quaternion.Euler(entry.rotationEuler);
+                }
+            }
+            else
+            {
+                // Update label position: Y position + 7 (as requested)
+                Vector3 targetPos = targetObject.transform.position;
+                labelObject.transform.position = new Vector3(targetPos.x, targetPos.y + 7f, targetPos.z);
+            }
             
             // Update Canvas worldCamera reference
             Canvas canvas = labelObject.GetComponent<Canvas>();

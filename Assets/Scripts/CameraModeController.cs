@@ -39,6 +39,17 @@ public class CameraModeController : MonoBehaviour
     public Button btn3D;       // assign Btn3D Button component
     public Button eyeButton;   // assign EyeButton Button component
     public Button labelButton; // assign LabelButton Button component (for toggling highlighter labels)
+
+    public Button satelliteButton; // assign SatelliteButton Button component
+    public GameObject satelliteMapImage; // assign satellite map image GameObject
+    private bool satelliteMapVisible = false;
+
+    public Button goHomeButton;
+
+    private float satelliteButton2DY;
+    public float satelliteButtonNon2DY = -240f;
+    private InteriorExteriorManager cachedInteriorManager;
+    private bool lastInteriorModeState = false;
     
     [Header("Button Visual States")]
     public Color activeButtonColor = new Color(0.5f, 0.5f, 0.5f, 1f);  // Dimmed color for active button
@@ -46,10 +57,18 @@ public class CameraModeController : MonoBehaviour
 
     [Header("Settings")]
     public float transitionSpeed = 5f;
+
+    [Header("3D Zoom Limits")]
+    public bool override3DZoomLimits = false;
+    public float mode3DMinHeight = 10f;
+    public float mode3DMaxHeight = 200f;
     
     [Header("Sidebar Animation")]
     public float sidebarSlideDuration = 0.3f;
     public AnimationCurve sidebarSlideCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+
+    [Header("Sidebar Behavior")]
+    public bool disableSidebarGameObjectOnClose = false;
     
     [Header("Fog Settings")]
     public bool enableFog = true;
@@ -72,6 +91,8 @@ public class CameraModeController : MonoBehaviour
     private Vector2 sidebarVisiblePosition;
     private Coroutine sidebarSlideCoroutine;
 
+    private Coroutine goHomeCoroutine;
+
     void Awake()
     {
         // Basic validation
@@ -83,6 +104,68 @@ public class CameraModeController : MonoBehaviour
         if (joystickManager == null) Debug.LogWarning("[CameraModeController] joystickManager not assigned.");
         if (droneController == null) Debug.LogWarning("[CameraModeController] droneController not assigned.");
         if (walkController == null) Debug.LogWarning("[CameraModeController] walkController not assigned.");
+    }
+
+    public void GoHome()
+    {
+        if (goHomeCoroutine != null)
+        {
+            StopCoroutine(goHomeCoroutine);
+            goHomeCoroutine = null;
+        }
+
+        goHomeCoroutine = StartCoroutine(GoHomeRoutine());
+    }
+
+    private System.Collections.IEnumerator GoHomeRoutine()
+    {
+        if (cachedInteriorManager == null)
+        {
+            cachedInteriorManager = FindFirstObjectByType<InteriorExteriorManager>();
+        }
+
+        if (cachedInteriorManager != null && cachedInteriorManager.IsInteriorMode())
+        {
+            cachedInteriorManager.ExitInteriorMode();
+            while (cachedInteriorManager != null && cachedInteriorManager.IsInteriorMode())
+            {
+                yield return null;
+            }
+        }
+
+        // Prevent controller scripts from fighting our home transition.
+        if (camera2DController != null) camera2DController.enabled = false;
+        if (walkController != null) walkController.enabled = false;
+        if (camera3DController != null) camera3DController.enabled = false;
+        if (droneController != null) droneController.enabled = false;
+
+        // Switch UI/state to Drone mode, but keep DroneController disabled during the smooth move.
+        // (DroneController can otherwise move/override the camera while we're interpolating.)
+        SwitchMode(TourMode.Drone);
+        if (droneController != null) droneController.enabled = false;
+
+        if (mainCamera != null)
+        {
+            Vector3 targetPos = new Vector3(95.2f, 14.9f, -251.5f);
+            yield return StartCoroutine(SmoothMoveTo(targetPos));
+            yield return StartCoroutine(SmoothRotateTo(30f, 329f, 0f));
+        }
+
+        if (droneController != null)
+        {
+            droneController.enabled = true;
+        }
+
+        goHomeCoroutine = null;
+    }
+
+    void OnSatelliteButton()
+    {
+        satelliteMapVisible = !satelliteMapVisible;
+        if (satelliteMapImage != null)
+        {
+            satelliteMapImage.SetActive(satelliteMapVisible);
+        }
     }
 
     void Start()
@@ -118,6 +201,18 @@ public class CameraModeController : MonoBehaviour
             labelButton.onClick.RemoveAllListeners();
             labelButton.onClick.AddListener(() => OnLabelButton());
         }
+
+        if (goHomeButton != null)
+        {
+            goHomeButton.onClick.RemoveAllListeners();
+            goHomeButton.onClick.AddListener(() => GoHome());
+        }
+
+        if (satelliteButton != null)
+        {
+            satelliteButton.onClick.RemoveAllListeners();
+            satelliteButton.onClick.AddListener(() => OnSatelliteButton());
+        }
         
         // Setup building icon button for sidebar toggle
         if (buildingIconButton != null)
@@ -135,6 +230,16 @@ public class CameraModeController : MonoBehaviour
         // Ensure joystick container starts hidden if set
         if (joystickContainer != null) joystickContainer.SetActive(false);
 
+        if (satelliteButton != null)
+        {
+            RectTransform rt = satelliteButton.GetComponent<RectTransform>();
+            satelliteButton2DY = rt != null ? rt.anchoredPosition.y : 0f;
+        }
+
+        // Ensure satellite map starts hidden
+        satelliteMapVisible = false;
+        if (satelliteMapImage != null) satelliteMapImage.SetActive(false);
+
         // Initialize fog settings
         SetupFog();
         
@@ -149,6 +254,25 @@ public class CameraModeController : MonoBehaviour
 
     void Update()
     {
+        if (cachedInteriorManager == null)
+        {
+            cachedInteriorManager = FindFirstObjectByType<InteriorExteriorManager>();
+            if (cachedInteriorManager != null)
+            {
+                lastInteriorModeState = cachedInteriorManager.IsInteriorMode();
+            }
+        }
+
+        if (cachedInteriorManager != null)
+        {
+            bool isInterior = cachedInteriorManager.IsInteriorMode();
+            if (isInterior != lastInteriorModeState)
+            {
+                lastInteriorModeState = isInterior;
+                ApplySatelliteButtonUI(currentMode);
+            }
+        }
+
         if (mainCamera == null) return;
 
         // Don't interfere with camera movement in any mode
@@ -156,11 +280,39 @@ public class CameraModeController : MonoBehaviour
         // Let DroneController and WalkController handle their respective modes
     }
 
+    void ApplySatelliteButtonUI(TourMode mode)
+    {
+        if (satelliteButton == null) return;
+
+        bool isInterior = cachedInteriorManager != null && cachedInteriorManager.IsInteriorMode();
+        satelliteButton.gameObject.SetActive(!isInterior);
+
+        RectTransform rt = satelliteButton.GetComponent<RectTransform>();
+        if (rt != null)
+        {
+            Vector2 pos = rt.anchoredPosition;
+            pos.y = (mode == TourMode.Mode2D) ? satelliteButton2DY : satelliteButtonNon2DY;
+            rt.anchoredPosition = pos;
+        }
+    }
+
     public void SwitchMode(TourMode mode)
     {
+        TourMode previousMode = currentMode;
+
         // If an earlier error prevented Start from completing, make sure we don't crash
         currentMode = mode;
         Debug.Log("[CameraModeController] Switching to " + mode);
+
+        // Capture the current 2D Y right before leaving 2D, so returning to 2D restores the correct position.
+        if (previousMode == TourMode.Mode2D && mode != TourMode.Mode2D && satelliteButton != null)
+        {
+            RectTransform rt = satelliteButton.GetComponent<RectTransform>();
+            if (rt != null)
+            {
+                satelliteButton2DY = rt.anchoredPosition.y;
+            }
+        }
 
         // Enable/disable controllers based on mode
         if (camera2DController != null)
@@ -281,15 +433,30 @@ public class CameraModeController : MonoBehaviour
         {
             camera3DController.enabled = (mode == TourMode.Mode3D);
             Debug.Log($"[CameraModeController] Camera3DController enabled: {camera3DController.enabled}");
+
+            float target3DMinHeight = camera3DController.minHeight;
+            float target3DMaxHeight = camera3DController.maxHeight;
+            if (override3DZoomLimits)
+            {
+                target3DMinHeight = mode3DMinHeight;
+                target3DMaxHeight = mode3DMaxHeight;
+            }
+
+            if (mode == TourMode.Mode3D)
+            {
+                camera3DController.minHeight = target3DMinHeight;
+                camera3DController.maxHeight = target3DMaxHeight;
+            }
             
             if (mode == TourMode.Mode3D && mainCamera != null)
             {
                 Vector3 currentPosition = mainCamera.transform.position;
+                float targetHeight = target3DMaxHeight;
                 
                 // First time entering 3D mode - smoothly move to specific position
                 if (firstTime3D)
                 {
-                    Vector3 initial3DPosition = new Vector3(112f, 50f, -135f);
+                    Vector3 initial3DPosition = new Vector3(112f, targetHeight, -135f);
                     StartCoroutine(SmoothMoveTo(initial3DPosition));
                     StartCoroutine(SmoothRotateTo(30f, 225f, 0f));
                     firstTime3D = false;
@@ -298,9 +465,9 @@ public class CameraModeController : MonoBehaviour
                 else
                 {
                     // Normal behavior - set Y to 50, keep X/Z, and rotate to x=30, y=225, z=0 for 3D mode
-                    StartCoroutine(SmoothMoveTo(new Vector3(currentPosition.x, 50f, currentPosition.z)));
+                    StartCoroutine(SmoothMoveTo(new Vector3(currentPosition.x, targetHeight, currentPosition.z)));
                     StartCoroutine(SmoothRotateTo(30f, 225f, 0f));
-                    Debug.Log($"[CameraModeController] Smoothly moving camera to height 50 and rotating to (30, 225, 0) for 3D mode");
+                    Debug.Log($"[CameraModeController] Smoothly moving camera to height {targetHeight} and rotating to (30, 225, 0) for 3D mode");
                 }
             }
         }
@@ -373,6 +540,9 @@ public class CameraModeController : MonoBehaviour
         // Label button visible only in 2D and 3D modes (NOT in Drone/Walk)
         if (labelButton != null)
             labelButton.gameObject.SetActive(mode == TourMode.Mode2D || mode == TourMode.Mode3D);
+
+        // Satellite button visible in all modes
+        ApplySatelliteButtonUI(mode);
         
         // Labels visible only in 2D and 3D modes (NOT in Drone/Walk)
         if (highlighterLabelManager != null)
@@ -714,7 +884,10 @@ public class CameraModeController : MonoBehaviour
             sidebarRect.anchoredPosition = sidebarHiddenPosition;
             if (sidebar != null)
             {
-                sidebar.SetActive(false);
+                if (disableSidebarGameObjectOnClose)
+                {
+                    sidebar.SetActive(false);
+                }
             }
             
             Debug.Log($"[CameraModeController] Sidebar initialized - Visible: {sidebarVisiblePosition}, Hidden: {sidebarHiddenPosition}, Screen Width: {screenWidth}");
@@ -834,7 +1007,7 @@ public class CameraModeController : MonoBehaviour
         sidebarRect.anchoredPosition = endPos;
         
         // Hide sidebar GameObject when fully closed
-        if (!isSidebarOpen && sidebar != null)
+        if (!isSidebarOpen && sidebar != null && disableSidebarGameObjectOnClose)
         {
             sidebar.SetActive(false);
         }

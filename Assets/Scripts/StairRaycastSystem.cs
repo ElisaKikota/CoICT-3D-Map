@@ -71,6 +71,28 @@ public class StairRaycastSystem : MonoBehaviour
     private StairData currentFloorStair; // The stair we're currently on (tracks current floor)
     private InteriorExteriorManager interiorExteriorManager;
     private bool isTransitioning = false;
+    private bool hasUsedStairsToChangeFloor = false;
+
+    public bool HasUsedStairsToChangeFloor()
+    {
+        return hasUsedStairsToChangeFloor;
+    }
+
+    public void ResetUsedStairsFlag()
+    {
+        hasUsedStairsToChangeFloor = false;
+    }
+
+    public bool TryGoDownOneFloor()
+    {
+        if (isTransitioning) return false;
+        if (currentFloorStair == null) return false;
+        if (currentFloorStair.downStair == null) return false;
+        if (!currentFloorStair.CanGoDown()) return false;
+
+        StartCoroutine(SwitchFloorCoroutine(currentFloorStair, currentFloorStair.downStair, goingUp: false));
+        return true;
+    }
     
     void Start()
     {
@@ -411,6 +433,7 @@ public class StairRaycastSystem : MonoBehaviour
         if (fromStair == null || toStair == null || mainCamera == null) yield break;
         
         isTransitioning = true;
+        hasUsedStairsToChangeFloor = true;
         HideStairsUI();
         
         // Determine target position and rotation using CURRENT stair's position data (much simpler!)

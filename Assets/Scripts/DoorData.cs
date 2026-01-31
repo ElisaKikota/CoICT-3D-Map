@@ -9,6 +9,10 @@ public class DoorData
     [Header("Door Information")]
     [Tooltip("Name of the door (displayed when raycast hits)")]
     public string doorName;
+
+    [Header("Floor Information")]
+    [Tooltip("Floor name to display when entering interior mode via this door (e.g., 'Ground Floor')")]
+    public string floorName;
     
     [Header("Door Object")]
     [Tooltip("The GameObject representing this door (for raycast detection)")]

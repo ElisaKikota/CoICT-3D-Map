@@ -38,6 +38,28 @@ public class DoorRaycastSystem : MonoBehaviour
     
     [Tooltip("Top Bar GameObject (will be hidden in interior mode)")]
     public GameObject topBar;
+
+    [Header("Top Bar - Interior Mode Visibility")]
+    [Tooltip("Top bar building icon button GameObject (hidden in interior mode)")]
+    public GameObject buildingIconButton;
+
+    [Tooltip("Top bar mode icons container GameObject (hidden in interior mode)")]
+    public GameObject modeIconsContainer;
+
+    [Tooltip("Top bar floor name GameObject (shown in interior mode)")]
+    public GameObject floorName;
+
+    [Tooltip("Top bar go back button GameObject (shown in interior mode)")]
+    public Button goBackButton;
+
+    [Tooltip("Top bar go home button GameObject (shown in all modes)")]
+    public Button goHomeButton;
+
+    [Tooltip("Minimum spacing between mode icons (when using a HorizontalLayoutGroup)")]
+    public float modeIconsMinSpacing = 0f;
+
+    [Tooltip("If true, hide the top bar while in interior mode")]
+    public bool hideTopBarInInteriorMode = false;
     
     [Tooltip("Parent GameObject containing all door GameObjects (e.g., 'Doors')")]
     public GameObject doorsParent;
@@ -56,6 +78,8 @@ public class DoorRaycastSystem : MonoBehaviour
     private DoorData currentHoveredDoor;
     private DoorData entryDoor; // Door used to enter interior
     private InteriorExteriorManager interiorManager;
+    private CameraModeController cameraModeController;
+    private HorizontalLayoutGroup modeIconsLayoutGroup;
     private Dictionary<DoorData, DoorLabel> doorLabels = new Dictionary<DoorData, DoorLabel>();
     
     void Start()
@@ -76,6 +100,7 @@ public class DoorRaycastSystem : MonoBehaviour
         }
         
         interiorManager = FindFirstObjectByType<InteriorExteriorManager>();
+        cameraModeController = FindFirstObjectByType<CameraModeController>();
         
         // Find doors parent if not assigned
         if (doorsParent == null)
@@ -117,7 +142,74 @@ public class DoorRaycastSystem : MonoBehaviour
         if (topBar != null)
         {
             bool isInteriorMode = interiorManager != null && interiorManager.IsInteriorMode();
-            topBar.SetActive(!isInteriorMode);
+            topBar.SetActive(!isInteriorMode || !hideTopBarInInteriorMode);
+        }
+
+        // Auto-find top bar children by name if not assigned
+        if (topBar != null)
+        {
+            if (buildingIconButton == null)
+            {
+                Transform t = topBar.transform.Find("BuildingIconButton");
+                if (t != null) buildingIconButton = t.gameObject;
+            }
+
+            if (modeIconsContainer == null)
+            {
+                Transform t = topBar.transform.Find("ModeIconsContainer");
+                if (t != null) modeIconsContainer = t.gameObject;
+            }
+
+            if (modeIconsLayoutGroup == null && modeIconsContainer != null)
+            {
+                modeIconsLayoutGroup = modeIconsContainer.GetComponent<HorizontalLayoutGroup>();
+            }
+
+            if (floorName == null)
+            {
+                Transform t = topBar.transform.Find("FloorName");
+                if (t != null) floorName = t.gameObject;
+            }
+
+            if (goBackButton == null)
+            {
+                Transform t = null;
+                if (modeIconsContainer != null)
+                {
+                    t = modeIconsContainer.transform.Find("GoBackButton");
+                }
+                if (t == null)
+                {
+                    t = topBar.transform.Find("GoBackButton");
+                }
+                if (t != null) goBackButton = t.GetComponent<Button>();
+            }
+
+            if (goHomeButton == null)
+            {
+                Transform t = null;
+                if (modeIconsContainer != null)
+                {
+                    t = modeIconsContainer.transform.Find("GoHomeButton");
+                }
+                if (t == null)
+                {
+                    t = topBar.transform.Find("GoHomeButton");
+                }
+                if (t != null) goHomeButton = t.GetComponent<Button>();
+            }
+        }
+
+        if (goBackButton != null && interiorManager != null)
+        {
+            goBackButton.onClick.RemoveAllListeners();
+            goBackButton.onClick.AddListener(interiorManager.HandleGoBackButton);
+        }
+
+        if (goHomeButton != null && cameraModeController != null)
+        {
+            goHomeButton.onClick.RemoveAllListeners();
+            goHomeButton.onClick.AddListener(cameraModeController.GoHome);
         }
     }
     
@@ -134,7 +226,74 @@ public class DoorRaycastSystem : MonoBehaviour
         // Hide/show top bar based on interior mode
         if (topBar != null)
         {
-            topBar.SetActive(!isInteriorMode);
+            bool topBarShouldBeActive = !isInteriorMode || !hideTopBarInInteriorMode;
+            topBar.SetActive(topBarShouldBeActive);
+
+            if (topBarShouldBeActive)
+            {
+                if (buildingIconButton != null)
+                {
+                    buildingIconButton.SetActive(!isInteriorMode);
+                }
+
+                if (modeIconsContainer != null)
+                {
+                    modeIconsContainer.SetActive(true);
+
+                    if (modeIconsLayoutGroup == null)
+                    {
+                        modeIconsLayoutGroup = modeIconsContainer.GetComponent<HorizontalLayoutGroup>();
+                    }
+
+                    if (modeIconsLayoutGroup != null)
+                    {
+                        modeIconsLayoutGroup.childAlignment = TextAnchor.MiddleRight;
+                        modeIconsLayoutGroup.reverseArrangement = false;
+                        modeIconsLayoutGroup.spacing = modeIconsMinSpacing;
+                        modeIconsLayoutGroup.childForceExpandWidth = false;
+                        modeIconsLayoutGroup.childForceExpandHeight = false;
+                    }
+
+                    // In interior mode, only show GoBack and GoHome buttons within the container
+                    int childCount = modeIconsContainer.transform.childCount;
+                    for (int i = 0; i < childCount; i++)
+                    {
+                        Transform child = modeIconsContainer.transform.GetChild(i);
+                        if (child == null) continue;
+
+                        bool shouldShow = !isInteriorMode;
+                        if (isInteriorMode)
+                        {
+                            shouldShow = child.name == "GoBackButton" || child.name == "GoHomeButton";
+                        }
+
+                        child.gameObject.SetActive(shouldShow);
+                    }
+
+                    // Ensure layout recalculates after enabling/disabling children.
+                    Canvas.ForceUpdateCanvases();
+                    RectTransform modeIconsRect = modeIconsContainer.GetComponent<RectTransform>();
+                    if (modeIconsRect != null)
+                    {
+                        LayoutRebuilder.ForceRebuildLayoutImmediate(modeIconsRect);
+                    }
+                }
+
+                if (floorName != null)
+                {
+                    floorName.SetActive(isInteriorMode);
+                }
+
+                if (goBackButton != null)
+                {
+                    goBackButton.gameObject.SetActive(isInteriorMode);
+                }
+
+                if (goHomeButton != null)
+                {
+                    goHomeButton.gameObject.SetActive(true);
+                }
+            }
         }
         
         // Check doors for raycast

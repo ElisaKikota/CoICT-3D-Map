@@ -32,6 +32,7 @@ public class InteriorExteriorManager : MonoBehaviour
     [Header("UI")]
     public Button exitInteriorButton;
     public GameObject exitButtonContainer;
+    public Button goBackButton;
     
     [Header("Interior Panel")]
     [Tooltip("Panel that displays interior information (building name, floor, etc.)")]
@@ -120,6 +121,12 @@ public class InteriorExteriorManager : MonoBehaviour
         {
             exitInteriorButton.onClick.RemoveAllListeners();
             exitInteriorButton.onClick.AddListener(ExitInteriorMode);
+        }
+
+        if (goBackButton != null)
+        {
+            goBackButton.onClick.RemoveAllListeners();
+            goBackButton.onClick.AddListener(HandleGoBackButton);
         }
         
         // Hide exit button initially
@@ -372,6 +379,8 @@ public class InteriorExteriorManager : MonoBehaviour
         // Try to find the ground floor stair (or first stair) as default
         if (stairRaycastSystem != null && stairRaycastSystem.stairs != null && stairRaycastSystem.stairs.Length > 0)
         {
+            stairRaycastSystem.ResetUsedStairsFlag();
+
             // Find ground floor stair, or use first stair if not found
             StairData initialFloor = null;
             foreach (var stair in stairRaycastSystem.stairs)
@@ -453,38 +462,46 @@ public class InteriorExteriorManager : MonoBehaviour
             InitializeTextComponentCache();
         }
         
-        // Build the text: Use Building Name first, fallback to Floor Name only if no building name
-        string displayText = "";
-        
-        // PRIORITY 1: Try to get building name from BuildingEntrySystem
+        // Build display text using building name + floor name (if available)
+        string buildingText = null;
         if (!string.IsNullOrEmpty(currentBuildingName))
         {
-            // Building name found - use it and skip floor name
-            displayText = currentBuildingName;
+            buildingText = currentBuildingName;
             Debug.Log($"[InteriorExteriorManager] Using building name from BuildingEntrySystem: {currentBuildingName}");
+        }
+
+        string floorText = null;
+        bool shouldUseStairsFloorName = stairRaycastSystem != null && stairRaycastSystem.HasUsedStairsToChangeFloor();
+
+        if (!shouldUseStairsFloorName && entryDoor != null && !string.IsNullOrEmpty(entryDoor.floorName))
+        {
+            floorText = entryDoor.floorName;
+        }
+        else if (stairRaycastSystem != null)
+        {
+            StairData currentFloor = stairRaycastSystem.GetCurrentFloor();
+            if (currentFloor != null && !string.IsNullOrEmpty(currentFloor.floorName))
+            {
+                floorText = currentFloor.floorName;
+            }
+        }
+
+        string displayText;
+        if (!string.IsNullOrEmpty(buildingText) && !string.IsNullOrEmpty(floorText))
+        {
+            displayText = $"{buildingText} - {floorText}";
+        }
+        else if (!string.IsNullOrEmpty(buildingText))
+        {
+            displayText = buildingText;
+        }
+        else if (!string.IsNullOrEmpty(floorText))
+        {
+            displayText = floorText;
         }
         else
         {
-            // PRIORITY 2: No building name, fallback to floor name from StairRaycastSystem
-            if (stairRaycastSystem != null)
-            {
-                StairData currentFloor = stairRaycastSystem.GetCurrentFloor();
-                if (currentFloor != null && !string.IsNullOrEmpty(currentFloor.floorName))
-                {
-                    displayText = currentFloor.floorName;
-                    Debug.Log($"[InteriorExteriorManager] No building name found, using floor name from StairRaycastSystem: {currentFloor.floorName}");
-                }
-            }
-            
-            if (string.IsNullOrEmpty(displayText))
-            {
-                Debug.LogWarning("[InteriorExteriorManager] No building name or floor name available");
-            }
-        }
-        
-        // If no building or floor info, show generic text
-        if (string.IsNullOrEmpty(displayText))
-        {
+            Debug.LogWarning("[InteriorExteriorManager] No building name or floor name available");
             displayText = "Interior";
         }
         
@@ -605,6 +622,19 @@ public class InteriorExteriorManager : MonoBehaviour
         if (isTransitioning || !isInteriorMode) return;
         
         StartCoroutine(ExitInteriorCoroutine(exitPosition, exitRotation));
+    }
+
+    public void HandleGoBackButton()
+    {
+        if (isTransitioning || !isInteriorMode) return;
+
+        bool wentDown = stairRaycastSystem != null && stairRaycastSystem.TryGoDownOneFloor();
+        if (wentDown)
+        {
+            return;
+        }
+
+        ExitInteriorMode();
     }
     
     IEnumerator ExitInteriorCoroutine()

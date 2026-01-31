@@ -185,6 +185,12 @@ public class SidebarButtonHandler : MonoBehaviour
     {
         Debug.Log($"[SidebarButtonHandler] Button clicked: {gameObject.name}");
         Debug.Log($"[SidebarButtonHandler] useAbsolutePosition: {useAbsolutePosition}, bestCameraPosition: {bestCameraPosition}, cameraYRotation: {cameraYRotation}");
+
+        // Close sidebar immediately when selecting an item
+        if (cameraModeController != null)
+        {
+            cameraModeController.CloseSidebarPublic();
+        }
         
         // Get building data first
         BuildingData dataToShow = GetBuildingData();

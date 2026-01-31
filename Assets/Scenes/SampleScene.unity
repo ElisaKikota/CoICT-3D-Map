@@ -246,6 +246,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -327,6 +334,127 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -3120995661545156223, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
+--- !u!1 &11577186
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 11577187}
+  - component: {fileID: 11577190}
+  - component: {fileID: 11577189}
+  - component: {fileID: 11577188}
+  m_Layer: 5
+  m_Name: GoHomeButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &11577187
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 11577186}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1160267880}
+  m_Father: {fileID: 24283100}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 300, y: 160}
+  m_Pivot: {x: 1, y: 0.5}
+--- !u!114 &11577188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 11577186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 11577189}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &11577189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 11577186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 1686591ac92a91949ba163fe397972c7, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &11577190
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 11577186}
+  m_CullTransparentMesh: 1
 --- !u!1 &21930095
 GameObject:
   m_ObjectHideFlags: 0
@@ -499,12 +627,14 @@ RectTransform:
   - {fileID: 773190230}
   - {fileID: 1371279851}
   - {fileID: 1585903908}
+  - {fileID: 1297864650}
+  - {fileID: 11577187}
   m_Father: {fileID: 473485171}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -565.7, y: 0}
-  m_SizeDelta: {x: 335.6, y: 100}
+  m_AnchoredPosition: {x: -58.73, y: 0}
+  m_SizeDelta: {x: 1571, y: 240}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &24283101
 MonoBehaviour:
@@ -524,7 +654,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 5
-  m_Spacing: 63.4
+  m_Spacing: 60.8
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -665,6 +795,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -903,8 +1040,8 @@ MonoBehaviour:
   movementSpeed: 50
   cameraYRotation: 214.5
   useCenterOfChildren: 0
-  glowDuration: 5
-  glowSpeed: 2
+  glowDuration: 3
+  glowSpeed: 3
   minGlowIntensity: 0.5
   maxGlowIntensity: 3
   glowColor: {r: 0, g: 1, b: 1, a: 1}
@@ -969,6 +1106,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -1048,6 +1192,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -1202,6 +1353,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -1718,6 +1876,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -1855,6 +2020,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -2464,6 +2636,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -2821,6 +3000,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -2983,6 +3169,142 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4045389214021112600, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
+--- !u!1 &174764045
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 174764046}
+  - component: {fileID: 174764048}
+  - component: {fileID: 174764047}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &174764046
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174764045}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1297864650}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 1, y: 0.5}
+--- !u!114 &174764047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174764045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: 
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4281479730
+  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 70
+  m_fontSizeBase: 70
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &174764048
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174764045}
+  m_CullTransparentMesh: 1
 --- !u!1 &176559039 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -1861604965400755317, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
@@ -3224,6 +3546,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -3525,7 +3854,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 210, y: 360, z: 385}
+  m_Size: {x: 180, y: 360, z: 385}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &243410837
 Transform:
@@ -3536,7 +3865,7 @@ Transform:
   m_GameObject: {fileID: 243410835}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.7, y: 175, z: -62}
+  m_LocalPosition: {x: 21, y: 175, z: -62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3776,6 +4105,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -4054,6 +4390,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -4133,6 +4476,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -4348,6 +4698,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -4575,6 +4932,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -4962,6 +5326,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -5165,7 +5536,7 @@ MonoBehaviour:
   joystickManager: {fileID: 1852897463}
   moveSpeed: 30
   rotateSpeed: 90
-  heightSpeed: 3
+  heightSpeed: 10
   boundaryController: {fileID: 929410625}
   minHeight: 10
   maxHeight: 200
@@ -5305,6 +5676,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -5569,8 +5947,8 @@ MonoBehaviour:
   movementSpeed: 50
   cameraYRotation: 116.9
   useCenterOfChildren: 0
-  glowDuration: 5
-  glowSpeed: 2
+  glowDuration: 3
+  glowSpeed: 3
   minGlowIntensity: 0.5
   maxGlowIntensity: 3
   glowColor: {r: 0, g: 1, b: 1, a: 1}
@@ -7036,8 +7414,9 @@ MonoBehaviour:
   roomEntryPoints: []
   exitInteriorButton: {fileID: 1280565728}
   exitButtonContainer: {fileID: 1711975748}
-  interiorPanel: {fileID: 0}
-  interiorPanelText: {fileID: 0}
+  goBackButton: {fileID: 0}
+  interiorPanel: {fileID: 473485170}
+  interiorPanelText: {fileID: 752372527}
   fadeImage: {fileID: 329011605}
   fadeDuration: 1
   fadeColor: {r: 0, g: 0, b: 0, a: 1}
@@ -7101,9 +7480,9 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 752372527}
   - {fileID: 800485178}
   - {fileID: 24283100}
-  - {fileID: 752372527}
   m_Father: {fileID: 1852014453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -7281,6 +7660,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -8043,6 +8429,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -8857,8 +9250,8 @@ MonoBehaviour:
   movementSpeed: 50
   cameraYRotation: 205.35
   useCenterOfChildren: 0
-  glowDuration: 5
-  glowSpeed: 2
+  glowDuration: 3
+  glowSpeed: 3
   minGlowIntensity: 0.5
   maxGlowIntensity: 3
   glowColor: {r: 0, g: 1, b: 1, a: 1}
@@ -8901,7 +9294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff822e0daeff22e4c979d5aa7bd6c4ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightColor: {r: 0, g: 1, b: 1, a: 1}
+  highlightColor: {r: 0, g: 1, b: 1, a: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   transparencyAmount: 0.3
   highlightIntensity: 2
@@ -9008,11 +9401,63 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allHighlightersParent: {fileID: 813012883}
+  manualLabelTargets:
+  - target: {fileID: 1370742345}
+    labelText: Block A
+    positionOffset: {x: -1, y: 10, z: 2}
+    overrideRotation: 1
+    rotationEuler: {x: 90, y: 0, z: 270}
+  - target: {fileID: 889568602}
+    labelText: Block B
+    positionOffset: {x: 0, y: 10, z: 12}
+    overrideRotation: 1
+    rotationEuler: {x: 90, y: 0, z: 0}
+  - target: {fileID: 421180664}
+    labelText: Block C
+    positionOffset: {x: 0, y: 10, z: 0}
+    overrideRotation: 1
+    rotationEuler: {x: 90, y: 0, z: 270}
+  - target: {fileID: 1190316773}
+    labelText: Block D
+    positionOffset: {x: 0, y: 10, z: 3}
+    overrideRotation: 1
+    rotationEuler: {x: 90, y: 0, z: 0}
+  - target: {fileID: 634482841}
+    labelText: Block E
+    positionOffset: {x: -13, y: 10, z: 4}
+    overrideRotation: 1
+    rotationEuler: {x: 90, y: 0, z: 0}
+  - target: {fileID: 1030758642}
+    labelText: U.H.P.C
+    positionOffset: {x: 0, y: 10, z: 0}
+    overrideRotation: 1
+    rotationEuler: {x: 90, y: 0, z: 0}
+  - target: {fileID: 1848749608}
+    labelText: Hostel
+    positionOffset: {x: 0, y: 10, z: 14.85}
+    overrideRotation: 1
+    rotationEuler: {x: 90, y: 0, z: 0}
+  - target: {fileID: 316422922}
+    labelText: Cafe
+    positionOffset: {x: 7, y: 10, z: 0}
+    overrideRotation: 1
+    rotationEuler: {x: 90, y: 0, z: 0}
+  - target: {fileID: 798650749}
+    labelText: Football Field
+    positionOffset: {x: 2.41, y: 20, z: -7}
+    overrideRotation: 1
+    rotationEuler: {x: 90, y: 0, z: 33.85}
+  - target: {fileID: 1530196046}
+    labelText: Tennis Court
+    positionOffset: {x: -4.6, y: 20, z: -5.5}
+    overrideRotation: 1
+    rotationEuler: {x: 90, y: 0, z: 37.74}
+  labelsRoot: {fileID: 0}
   cameraModeController: {fileID: 0}
   labelPrefab: {fileID: 0}
   labelHeightOffset: 2
-  labelColor: {r: 1, g: 1, b: 1, a: 1}
-  labelFontSize: 3
+  labelColor: {r: 0, g: 0, b: 0, a: 1}
+  labelFontSize: 10
   labelsVisibleByDefault: 1
 --- !u!4 &585954391
 Transform:
@@ -9189,6 +9634,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -9289,6 +9741,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -9305,7 +9764,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -9128012098554472930, guid: c4628686306dfdf47aad6d23bddb0c8c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.001
+      value: -0.3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c4628686306dfdf47aad6d23bddb0c8c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9353,7 +9812,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -5066493223152278515, guid: c4628686306dfdf47aad6d23bddb0c8c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.001
+      value: -0.2
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: c4628686306dfdf47aad6d23bddb0c8c, type: 3}
       propertyPath: m_Name
@@ -9361,7 +9820,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1904312124815213365, guid: c4628686306dfdf47aad6d23bddb0c8c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8244340130998777442, guid: c4628686306dfdf47aad6d23bddb0c8c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -9607,6 +10066,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -9740,6 +10206,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -10389,6 +10862,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -10552,6 +11032,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -11079,6 +11566,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -11133,33 +11627,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -7300668765330950975, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
---- !u!1 &740498661 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -5510727889569388541, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
-  m_PrefabInstance: {fileID: 1232308315}
-  m_PrefabAsset: {fileID: 0}
---- !u!64 &740498665
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 740498661}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 3325776505655643356, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
 --- !u!1 &740582379 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 921391927218321214, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
@@ -11249,7 +11716,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 50, y: 0}
-  m_SizeDelta: {x: 850, y: 240}
+  m_SizeDelta: {x: 1818.5, y: 240}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &752372528
 MonoBehaviour:
@@ -11399,6 +11866,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -11478,6 +11952,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -11557,6 +12038,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -11743,8 +12231,8 @@ MonoBehaviour:
   movementSpeed: 50
   cameraYRotation: 23.6
   useCenterOfChildren: 0
-  glowDuration: 5
-  glowSpeed: 2
+  glowDuration: 3
+  glowSpeed: 3
   minGlowIntensity: 0.5
   maxGlowIntensity: 3
   glowColor: {r: 0, g: 1, b: 1, a: 1}
@@ -11957,6 +12445,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -12167,6 +12662,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -12246,6 +12748,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -13100,6 +13609,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -13420,8 +13936,8 @@ MonoBehaviour:
   movementSpeed: 50
   cameraYRotation: 250.7
   useCenterOfChildren: 0
-  glowDuration: 5
-  glowSpeed: 2
+  glowDuration: 3
+  glowSpeed: 3
   minGlowIntensity: 0.5
   maxGlowIntensity: 3
   glowColor: {r: 0, g: 1, b: 1, a: 1}
@@ -13645,8 +14161,8 @@ MonoBehaviour:
   movementSpeed: 50
   cameraYRotation: 240.5
   useCenterOfChildren: 0
-  glowDuration: 5
-  glowSpeed: 2
+  glowDuration: 3
+  glowSpeed: 3
   minGlowIntensity: 0.5
   maxGlowIntensity: 3
   glowColor: {r: 0, g: 1, b: 1, a: 1}
@@ -13711,6 +14227,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -13854,6 +14377,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -14211,6 +14741,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -14290,6 +14827,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -14712,6 +15256,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -14896,8 +15447,8 @@ MonoBehaviour:
   movementSpeed: 50
   cameraYRotation: 224.1
   useCenterOfChildren: 0
-  glowDuration: 5
-  glowSpeed: 2
+  glowDuration: 3
+  glowSpeed: 3
   minGlowIntensity: 0.5
   maxGlowIntensity: 3
   glowColor: {r: 0, g: 1, b: 1, a: 1}
@@ -14992,6 +15543,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -15236,33 +15794,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &939132359 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3893722416717529905, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
-  m_PrefabInstance: {fileID: 1232308315}
-  m_PrefabAsset: {fileID: 0}
---- !u!64 &939132363
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 939132359}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -567259905036692206, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
 --- !u!1 &939860911 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -5049032948309972686, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
@@ -15583,6 +16114,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -15920,6 +16458,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -16107,6 +16652,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -16213,6 +16765,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -16755,6 +17314,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -16834,6 +17400,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -16913,6 +17486,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -17100,6 +17680,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -17179,6 +17766,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -17285,6 +17879,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -17339,6 +17940,127 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4005074219740649688, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
+--- !u!1 &1138608573
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1138608574}
+  - component: {fileID: 1138608577}
+  - component: {fileID: 1138608576}
+  - component: {fileID: 1138608575}
+  m_Layer: 5
+  m_Name: SatelliteButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1138608574
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138608573}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1163912306}
+  m_Father: {fileID: 1852014453}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -44.94, y: -605}
+  m_SizeDelta: {x: 155, y: 155}
+  m_Pivot: {x: 1, y: 1}
+--- !u!114 &1138608575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138608573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1138608576}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1138608576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138608573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: af00ef88115692d48b4c27c204a4dc3d, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1138608577
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138608573}
+  m_CullTransparentMesh: 1
 --- !u!1 &1138837303 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -3493695462082327530, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
@@ -17418,6 +18140,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -17574,6 +18303,142 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 2609730314452542683, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
+--- !u!1 &1160267879
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1160267880}
+  - component: {fileID: 1160267882}
+  - component: {fileID: 1160267881}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1160267880
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1160267879}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 11577187}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 1, y: 0.5}
+--- !u!114 &1160267881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1160267879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: 
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4281479730
+  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 70
+  m_fontSizeBase: 70
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1160267882
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1160267879}
+  m_CullTransparentMesh: 1
 --- !u!1 &1161278180
 GameObject:
   m_ObjectHideFlags: 0
@@ -17626,6 +18491,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -17680,6 +18552,142 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 8467973019869391972, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
+--- !u!1 &1163912305
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1163912306}
+  - component: {fileID: 1163912308}
+  - component: {fileID: 1163912307}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1163912306
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1163912305}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1138608574}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1163912307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1163912305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: 
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4281479730
+  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 24
+  m_fontSizeBase: 24
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1163912308
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1163912305}
+  m_CullTransparentMesh: 1
 --- !u!1 &1173141346
 GameObject:
   m_ObjectHideFlags: 0
@@ -17732,6 +18740,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -17865,6 +18880,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -18265,9 +19287,16 @@ MonoBehaviour:
   btn3D: {fileID: 773190231}
   eyeButton: {fileID: 0}
   labelButton: {fileID: 2083042848}
+  satelliteButton: {fileID: 1138608575}
+  satelliteMapImage: {fileID: 598974107}
+  goHomeButton: {fileID: 11577188}
+  satelliteButtonNon2DY: -240
   activeButtonColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   normalButtonColor: {r: 1, g: 1, b: 1, a: 1}
   transitionSpeed: 1
+  override3DZoomLimits: 1
+  mode3DMinHeight: 15
+  mode3DMaxHeight: 80
   sidebarSlideDuration: 0.3
   sidebarSlideCurve:
     serializedVersion: 2
@@ -18293,6 +19322,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  disableSidebarGameObjectOnClose: 0
   enableFog: 1
   fogStartDistance: 100
   fogEndDistance: 400
@@ -18501,6 +19531,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -18736,6 +19773,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -18833,10 +19877,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7021324459835417191, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3893722416717529905, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
+    - {fileID: 5446169893169118426, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
+    - {fileID: -5510727889569388541, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
+    - {fileID: 7021324459835417191, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1748967465290513111, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
@@ -19223,9 +20271,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8520419181411329417, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
       insertIndex: -1
       addedObject: {fileID: 829546116}
-    - targetCorrespondingSourceObject: {fileID: 7021324459835417191, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1965247962}
     - targetCorrespondingSourceObject: {fileID: 7691425605029638100, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1579236327}
@@ -19382,9 +20427,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -6603500416288368519, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1791665800}
-    - targetCorrespondingSourceObject: {fileID: -5510727889569388541, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 740498665}
     - targetCorrespondingSourceObject: {fileID: -2182715956741043977, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1081491141}
@@ -19415,9 +20457,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -1690102145688852833, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
       insertIndex: -1
       addedObject: {fileID: 982171174}
-    - targetCorrespondingSourceObject: {fileID: 5446169893169118426, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1331176978}
     - targetCorrespondingSourceObject: {fileID: 781679719685557685, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
       insertIndex: -1
       addedObject: {fileID: 316969629}
@@ -19574,9 +20613,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -3821253740895256905, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
       insertIndex: -1
       addedObject: {fileID: 896571858}
-    - targetCorrespondingSourceObject: {fileID: 3893722416717529905, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 939132363}
     - targetCorrespondingSourceObject: {fileID: 3380080921822813343, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
       insertIndex: -1
       addedObject: {fileID: 810845569}
@@ -19692,6 +20728,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -20622,6 +21665,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -20701,6 +21751,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -20728,6 +21785,127 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.71, y: 2.9, z: 1.33}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1297864649
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1297864650}
+  - component: {fileID: 1297864653}
+  - component: {fileID: 1297864652}
+  - component: {fileID: 1297864651}
+  m_Layer: 5
+  m_Name: GoBackButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1297864650
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297864649}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 174764046}
+  m_Father: {fileID: 24283100}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 300, y: 160}
+  m_Pivot: {x: 1, y: 0.5}
+--- !u!114 &1297864651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297864649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1297864652}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1297864652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297864649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: ff0597ab4ea41ce459fe6b00fd2c6924, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1297864653
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297864649}
+  m_CullTransparentMesh: 1
 --- !u!1 &1303186498
 GameObject:
   m_ObjectHideFlags: 0
@@ -20780,6 +21958,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -21052,6 +22237,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -21128,33 +22320,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 2534964839176971238, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
---- !u!1 &1331176974 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5446169893169118426, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
-  m_PrefabInstance: {fileID: 1232308315}
-  m_PrefabAsset: {fileID: 0}
---- !u!64 &1331176978
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1331176974}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 6176998379950567666, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
 --- !u!1 &1341457543 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3930522509020530296, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
@@ -21511,6 +22676,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -22187,6 +23359,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -22342,6 +23521,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -22448,6 +23634,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -22527,6 +23720,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -22695,6 +23895,7 @@ MonoBehaviour:
   uiCanvas: {fileID: 1852014452}
   doors:
   - doorName: Block A Main Door
+    floorName: Block A Ground Floor
     doorObject: {fileID: 1102354671}
     doorCollider: {fileID: 1102354674}
     allowEntering: 1
@@ -22703,6 +23904,7 @@ MonoBehaviour:
     exitPosition: {x: 77.86, y: -1, z: -205.2}
     exitRotation: {x: 0, y: 90, z: 0}
   - doorName: Block A Back Door
+    floorName: Block A Ground Floor
     doorObject: {fileID: 1693657896}
     doorCollider: {fileID: 1693657899}
     allowEntering: 1
@@ -22710,15 +23912,17 @@ MonoBehaviour:
     entryRotation: {x: 0, y: 90, z: 0}
     exitPosition: {x: 66.7, y: -1, z: -206.4}
     exitRotation: {x: 0, y: 270, z: 0}
-  - doorName: Block B Back Door
-    doorObject: {fileID: 615141432}
-    doorCollider: {fileID: 615141435}
+  - doorName: Block B Main Door
+    floorName: Block B Ground Floor
+    doorObject: {fileID: 4945409}
+    doorCollider: {fileID: 4945412}
     allowEntering: 1
-    entryPosition: {x: 56.86, y: -1, z: -206.4}
-    entryRotation: {x: 0, y: 270, z: 0}
-    exitPosition: {x: 58.67, y: -1, z: -206.4}
-    exitRotation: {x: 0, y: 90, z: 0}
+    entryPosition: {x: 32, y: -1, z: -206.7}
+    entryRotation: {x: 0, y: 90, z: 0}
+    exitPosition: {x: 28.59, y: -1, z: -206.2}
+    exitRotation: {x: 0, y: 270, z: 0}
   - doorName: Block B Back Door
+    floorName: Block B Ground Floor
     doorObject: {fileID: 615141432}
     doorCollider: {fileID: 615141435}
     allowEntering: 1
@@ -22727,24 +23931,27 @@ MonoBehaviour:
     exitPosition: {x: 58.67, y: -1, z: -206.4}
     exitRotation: {x: 0, y: 90, z: 0}
   - doorName: Block D Main Door
+    floorName: Block D
     doorObject: {fileID: 1980398852}
     doorCollider: {fileID: 1980398855}
     allowEntering: 1
     entryPosition: {x: 0.41, y: -1, z: -219.3}
     entryRotation: {x: 0, y: 180, z: 0}
     exitPosition: {x: 0.41, y: -1, z: -213.4}
-    exitRotation: {x: 0, y: 0, z: 0}
+    exitRotation: {x: 0, y: 360, z: 0}
   - doorName: Block D Back Door
+    floorName: Block D
     doorObject: {fileID: 1980398852}
     doorCollider: {fileID: 1980398855}
     allowEntering: 1
     entryPosition: {x: -36.5, y: -1, z: -219.3}
     entryRotation: {x: 0, y: 180, z: 0}
     exitPosition: {x: -36.5, y: -1, z: -213.4}
-    exitRotation: {x: 0, y: 0, z: 0}
+    exitRotation: {x: 0, y: 360, z: 0}
   doorsWithSecondaryInterior:
   - door:
       doorName: A009
+      floorName: 
       doorObject: {fileID: 757481273}
       doorCollider: {fileID: 757481276}
       allowEntering: 0
@@ -22765,6 +23972,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: A009b
+      floorName: 
       doorObject: {fileID: 1435179632}
       doorCollider: {fileID: 1435179635}
       allowEntering: 0
@@ -22785,6 +23993,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: A008
+      floorName: 
       doorObject: {fileID: 1119003505}
       doorCollider: {fileID: 1119003508}
       allowEntering: 0
@@ -22805,6 +24014,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: A003
+      floorName: 
       doorObject: {fileID: 1733852356}
       doorCollider: {fileID: 1733852359}
       allowEntering: 0
@@ -22825,6 +24035,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: A012
+      floorName: 
       doorObject: {fileID: 2005006994}
       doorCollider: {fileID: 2005006997}
       allowEntering: 0
@@ -22845,6 +24056,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: A013
+      floorName: 
       doorObject: {fileID: 894721864}
       doorCollider: {fileID: 894721867}
       allowEntering: 0
@@ -22865,6 +24077,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: A014
+      floorName: 
       doorObject: {fileID: 1303186498}
       doorCollider: {fileID: 1303186501}
       allowEntering: 0
@@ -22885,6 +24098,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: A109
+      floorName: 
       doorObject: {fileID: 50489719}
       doorCollider: {fileID: 50489722}
       allowEntering: 0
@@ -22905,6 +24119,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: A104
+      floorName: 
       doorObject: {fileID: 1320260804}
       doorCollider: {fileID: 1320260807}
       allowEntering: 0
@@ -22925,6 +24140,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: A103
+      floorName: 
       doorObject: {fileID: 794491748}
       doorCollider: {fileID: 794491751}
       allowEntering: 0
@@ -22945,6 +24161,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: A102
+      floorName: 
       doorObject: {fileID: 1451433025}
       doorCollider: {fileID: 1451433028}
       allowEntering: 0
@@ -22965,6 +24182,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: A101
+      floorName: 
       doorObject: {fileID: 48886511}
       doorCollider: {fileID: 48886514}
       allowEntering: 0
@@ -22985,6 +24203,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: A110
+      floorName: 
       doorObject: {fileID: 1011591227}
       doorCollider: {fileID: 1011591230}
       allowEntering: 0
@@ -23005,6 +24224,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: A111
+      floorName: 
       doorObject: {fileID: 290266536}
       doorCollider: {fileID: 290266539}
       allowEntering: 0
@@ -23025,6 +24245,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: A112
+      floorName: 
       doorObject: {fileID: 788486195}
       doorCollider: {fileID: 788486198}
       allowEntering: 0
@@ -23045,6 +24266,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: A113
+      floorName: 
       doorObject: {fileID: 990949772}
       doorCollider: {fileID: 990949775}
       allowEntering: 0
@@ -23065,6 +24287,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: A121
+      floorName: 
       doorObject: {fileID: 1557015718}
       doorCollider: {fileID: 1557015721}
       allowEntering: 0
@@ -23085,6 +24308,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B002
+      floorName: 
       doorObject: {fileID: 1076315878}
       doorCollider: {fileID: 1076315881}
       allowEntering: 0
@@ -23105,6 +24329,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B003
+      floorName: 
       doorObject: {fileID: 1409302489}
       doorCollider: {fileID: 1409302492}
       allowEntering: 0
@@ -23125,6 +24350,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B004
+      floorName: 
       doorObject: {fileID: 733120052}
       doorCollider: {fileID: 733120055}
       allowEntering: 0
@@ -23145,6 +24371,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B005
+      floorName: 
       doorObject: {fileID: 316248858}
       doorCollider: {fileID: 316248861}
       allowEntering: 0
@@ -23165,6 +24392,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B006
+      floorName: 
       doorObject: {fileID: 896805103}
       doorCollider: {fileID: 896805106}
       allowEntering: 0
@@ -23185,6 +24413,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B007
+      floorName: 
       doorObject: {fileID: 1782755834}
       doorCollider: {fileID: 1782755837}
       allowEntering: 0
@@ -23205,6 +24434,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B008
+      floorName: 
       doorObject: {fileID: 1140802992}
       doorCollider: {fileID: 1140802995}
       allowEntering: 0
@@ -23225,6 +24455,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B009
+      floorName: 
       doorObject: {fileID: 221595644}
       doorCollider: {fileID: 221595647}
       allowEntering: 0
@@ -23245,6 +24476,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B011
+      floorName: 
       doorObject: {fileID: 1543535904}
       doorCollider: {fileID: 1543535907}
       allowEntering: 0
@@ -23265,6 +24497,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B012
+      floorName: 
       doorObject: {fileID: 496402525}
       doorCollider: {fileID: 496402528}
       allowEntering: 0
@@ -23285,6 +24518,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B013
+      floorName: 
       doorObject: {fileID: 838856557}
       doorCollider: {fileID: 838856560}
       allowEntering: 0
@@ -23305,6 +24539,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B014
+      floorName: 
       doorObject: {fileID: 294129049}
       doorCollider: {fileID: 294129052}
       allowEntering: 0
@@ -23325,6 +24560,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B016
+      floorName: 
       doorObject: {fileID: 93882870}
       doorCollider: {fileID: 93882873}
       allowEntering: 0
@@ -23345,6 +24581,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B018
+      floorName: 
       doorObject: {fileID: 157590579}
       doorCollider: {fileID: 157590582}
       allowEntering: 0
@@ -23365,6 +24602,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B019
+      floorName: 
       doorObject: {fileID: 1173141346}
       doorCollider: {fileID: 1173141349}
       allowEntering: 0
@@ -23385,6 +24623,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B020
+      floorName: 
       doorObject: {fileID: 596045900}
       doorCollider: {fileID: 596045903}
       allowEntering: 0
@@ -23405,6 +24644,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B101
+      floorName: 
       doorObject: {fileID: 601224373}
       doorCollider: {fileID: 601224376}
       allowEntering: 0
@@ -23425,6 +24665,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B102
+      floorName: 
       doorObject: {fileID: 654133043}
       doorCollider: {fileID: 654133046}
       allowEntering: 0
@@ -23445,6 +24686,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B103
+      floorName: 
       doorObject: {fileID: 1077200657}
       doorCollider: {fileID: 1077200660}
       allowEntering: 0
@@ -23465,6 +24707,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B105
+      floorName: 
       doorObject: {fileID: 1858982864}
       doorCollider: {fileID: 1858982867}
       allowEntering: 0
@@ -23485,6 +24728,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B107
+      floorName: 
       doorObject: {fileID: 2034209363}
       doorCollider: {fileID: 2034209366}
       allowEntering: 0
@@ -23505,6 +24749,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B108
+      floorName: 
       doorObject: {fileID: 1540861715}
       doorCollider: {fileID: 1540861718}
       allowEntering: 0
@@ -23525,6 +24770,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B109
+      floorName: 
       doorObject: {fileID: 27655766}
       doorCollider: {fileID: 1540861718}
       allowEntering: 0
@@ -23545,6 +24791,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B110
+      floorName: 
       doorObject: {fileID: 1778092843}
       doorCollider: {fileID: 1778092846}
       allowEntering: 0
@@ -23565,6 +24812,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B111
+      floorName: 
       doorObject: {fileID: 760055905}
       doorCollider: {fileID: 760055908}
       allowEntering: 0
@@ -23585,6 +24833,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B201
+      floorName: 
       doorObject: {fileID: 2038289167}
       doorCollider: {fileID: 2038289170}
       allowEntering: 0
@@ -23605,6 +24854,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B202
+      floorName: 
       doorObject: {fileID: 1688788054}
       doorCollider: {fileID: 1688788057}
       allowEntering: 0
@@ -23625,6 +24875,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B203
+      floorName: 
       doorObject: {fileID: 1600170264}
       doorCollider: {fileID: 1600170267}
       allowEntering: 0
@@ -23645,6 +24896,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B206
+      floorName: 
       doorObject: {fileID: 1161278180}
       doorCollider: {fileID: 1161278183}
       allowEntering: 0
@@ -23665,6 +24917,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B207
+      floorName: 
       doorObject: {fileID: 516973335}
       doorCollider: {fileID: 516973338}
       allowEntering: 0
@@ -23685,6 +24938,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B208
+      floorName: 
       doorObject: {fileID: 1222538671}
       doorCollider: {fileID: 1222538674}
       allowEntering: 0
@@ -23705,6 +24959,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B210
+      floorName: 
       doorObject: {fileID: 2100520855}
       doorCollider: {fileID: 2100520858}
       allowEntering: 0
@@ -23725,6 +24980,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B211
+      floorName: 
       doorObject: {fileID: 1076154112}
       doorCollider: {fileID: 1076154115}
       allowEntering: 0
@@ -23745,6 +25001,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B301
+      floorName: 
       doorObject: {fileID: 1371106964}
       doorCollider: {fileID: 1371106967}
       allowEntering: 0
@@ -23765,6 +25022,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B302
+      floorName: 
       doorObject: {fileID: 764331607}
       doorCollider: {fileID: 764331610}
       allowEntering: 0
@@ -23785,6 +25043,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B303
+      floorName: 
       doorObject: {fileID: 1239672676}
       doorCollider: {fileID: 1239672679}
       allowEntering: 0
@@ -23805,6 +25064,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B308
+      floorName: 
       doorObject: {fileID: 851801955}
       doorCollider: {fileID: 851801958}
       allowEntering: 0
@@ -23825,6 +25085,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: B310
+      floorName: 
       doorObject: {fileID: 109004436}
       doorCollider: {fileID: 109004439}
       allowEntering: 0
@@ -23845,6 +25106,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: C03
+      floorName: 
       doorObject: {fileID: 329618713}
       doorCollider: {fileID: 329618716}
       allowEntering: 0
@@ -23865,6 +25127,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: C04
+      floorName: 
       doorObject: {fileID: 1939655897}
       doorCollider: {fileID: 1939655900}
       allowEntering: 0
@@ -23885,6 +25148,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: C05
+      floorName: 
       doorObject: {fileID: 1296392076}
       doorCollider: {fileID: 1296392079}
       allowEntering: 0
@@ -23905,6 +25169,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: C06
+      floorName: 
       doorObject: {fileID: 979283780}
       doorCollider: {fileID: 979283783}
       allowEntering: 0
@@ -23925,6 +25190,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: D01
+      floorName: 
       doorObject: {fileID: 65828525}
       doorCollider: {fileID: 65828528}
       allowEntering: 0
@@ -23945,6 +25211,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: D04
+      floorName: 
       doorObject: {fileID: 1099955456}
       doorCollider: {fileID: 1099955459}
       allowEntering: 0
@@ -23965,6 +25232,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: D06
+      floorName: 
       doorObject: {fileID: 1974487944}
       doorCollider: {fileID: 1974487947}
       allowEntering: 0
@@ -23985,6 +25253,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: D08
+      floorName: 
       doorObject: {fileID: 1981407814}
       doorCollider: {fileID: 1981407817}
       allowEntering: 0
@@ -24005,6 +25274,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: D25
+      floorName: 
       doorObject: {fileID: 1622426286}
       doorCollider: {fileID: 1622426289}
       allowEntering: 0
@@ -24025,6 +25295,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: D07
+      floorName: 
       doorObject: {fileID: 777214733}
       doorCollider: {fileID: 777214736}
       allowEntering: 0
@@ -24045,6 +25316,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: D24
+      floorName: 
       doorObject: {fileID: 331484416}
       doorCollider: {fileID: 331484419}
       allowEntering: 0
@@ -24065,6 +25337,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: D23
+      floorName: 
       doorObject: {fileID: 876896233}
       doorCollider: {fileID: 876896236}
       allowEntering: 0
@@ -24085,6 +25358,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: D21
+      floorName: 
       doorObject: {fileID: 1946637788}
       doorCollider: {fileID: 1946637791}
       allowEntering: 0
@@ -24105,6 +25379,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: D20A
+      floorName: 
       doorObject: {fileID: 2032701581}
       doorCollider: {fileID: 2032701584}
       allowEntering: 0
@@ -24125,6 +25400,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: D20B
+      floorName: 
       doorObject: {fileID: 1292719508}
       doorCollider: {fileID: 1292719511}
       allowEntering: 0
@@ -24145,6 +25421,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: D20C
+      floorName: 
       doorObject: {fileID: 884905906}
       doorCollider: {fileID: 884905909}
       allowEntering: 0
@@ -24165,6 +25442,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: D20D
+      floorName: 
       doorObject: {fileID: 1030097052}
       doorCollider: {fileID: 1030097055}
       allowEntering: 0
@@ -24185,6 +25463,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: D19
+      floorName: 
       doorObject: {fileID: 1673196901}
       doorCollider: {fileID: 1673196904}
       allowEntering: 0
@@ -24205,6 +25484,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: D18
+      floorName: 
       doorObject: {fileID: 645654063}
       doorCollider: {fileID: 645654066}
       allowEntering: 0
@@ -24225,6 +25505,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: D11
+      floorName: 
       doorObject: {fileID: 1440452939}
       doorCollider: {fileID: 1440452942}
       allowEntering: 0
@@ -24245,6 +25526,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: D11
+      floorName: 
       doorObject: {fileID: 1440452939}
       doorCollider: {fileID: 1440452942}
       allowEntering: 0
@@ -24265,6 +25547,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: A107
+      floorName: 
       doorObject: {fileID: 1585845239}
       doorCollider: {fileID: 1585845241}
       allowEntering: 0
@@ -24285,6 +25568,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: A120
+      floorName: 
       doorObject: {fileID: 596927034}
       doorCollider: {fileID: 596927036}
       allowEntering: 0
@@ -24305,6 +25589,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: A119
+      floorName: 
       doorObject: {fileID: 278682798}
       doorCollider: {fileID: 278682800}
       allowEntering: 0
@@ -24325,6 +25610,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: A115
+      floorName: 
       doorObject: {fileID: 142520869}
       doorCollider: {fileID: 142520870}
       allowEntering: 0
@@ -24345,6 +25631,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: A116
+      floorName: 
       doorObject: {fileID: 1229487194}
       doorCollider: {fileID: 1229487197}
       allowEntering: 0
@@ -24365,6 +25652,7 @@ MonoBehaviour:
       roomObjects: []
   - door:
       doorName: A118
+      floorName: 
       doorObject: {fileID: 1947306436}
       doorCollider: {fileID: 1947306439}
       allowEntering: 0
@@ -24386,6 +25674,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 1711975752}
   persistentExitButton: {fileID: 1280565728}
   topBar: {fileID: 473485170}
+  buildingIconButton: {fileID: 800485177}
+  modeIconsContainer: {fileID: 24283099}
+  floorName: {fileID: 752372526}
+  goBackButton: {fileID: 1297864651}
+  goHomeButton: {fileID: 11577188}
+  modeIconsMinSpacing: 60
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 2132507603}
   maxRaycastDistance: 50
   blockingLayers:
@@ -24846,6 +26141,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -25030,8 +26332,8 @@ MonoBehaviour:
   movementSpeed: 50
   cameraYRotation: 274.3
   useCenterOfChildren: 0
-  glowDuration: 5
-  glowSpeed: 2
+  glowDuration: 3
+  glowSpeed: 3
   minGlowIntensity: 0.5
   maxGlowIntensity: 3
   glowColor: {r: 0, g: 1, b: 1, a: 1}
@@ -25096,6 +26398,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -25229,6 +26538,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -25563,6 +26879,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -25932,6 +27255,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -26209,6 +27539,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -26509,6 +27846,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -26866,6 +28210,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -27081,6 +28432,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -27264,11 +28622,11 @@ RectTransform:
   - {fileID: 1280565727}
   m_Father: {fileID: 1852014453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -13, y: -257}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 250, y: 120}
-  m_Pivot: {x: 1, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1711975750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27429,6 +28787,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -27715,6 +29080,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -27821,6 +29193,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -28394,7 +29773,7 @@ MonoBehaviour:
     floorName: BlockB 3rd Floor Main
     stairType: 2
     upStairName: 
-    downStairName: 
+    downStairName: BlockB 2nd Floor Main Stairs
     upPosition: {x: 56.77, y: 7.5, z: -203.2}
     upRotation: {x: 0, y: 270, z: 0}
     downPosition: {x: 56.77, y: 4.5, z: -203.2}
@@ -28404,8 +29783,8 @@ MonoBehaviour:
     stairCollider: {fileID: 523080440}
     floorName: BlockB 2nd Floor
     stairType: 1
-    upStairName: 
-    downStairName: 
+    upStairName: BlockB 3rd Floor Main Stairs
+    downStairName: BlockB 1st Floor Main Stairs
     upPosition: {x: 56.77, y: 7.5, z: -203.2}
     upRotation: {x: 0, y: 270, z: 0}
     downPosition: {x: 56.77, y: 1.5, z: -203.2}
@@ -28415,8 +29794,8 @@ MonoBehaviour:
     stairCollider: {fileID: 496169236}
     floorName: BlockB 1st Floor Main
     stairType: 1
-    upStairName: 
-    downStairName: 
+    upStairName: BlockB 2nd Floor Main Stairs
+    downStairName: BlockB Ground Main Stairs
     upPosition: {x: 56.77, y: 4.5, z: -203.2}
     upRotation: {x: 0, y: 270, z: 0}
     downPosition: {x: 56.77, y: -1, z: -203.2}
@@ -28426,7 +29805,7 @@ MonoBehaviour:
     stairCollider: {fileID: 585092248}
     floorName: Block B Ground Floor
     stairType: 0
-    upStairName: 
+    upStairName: BlockB 1st Floor Main Stairs
     downStairName: 
     upPosition: {x: 56.77, y: 1.5, z: -203.2}
     upRotation: {x: 0, y: 270, z: 0}
@@ -28437,7 +29816,7 @@ MonoBehaviour:
     stairCollider: {fileID: 328568044}
     floorName: Block B Ground Floor
     stairType: 0
-    upStairName: 
+    upStairName: BlockB 1st Floor Back Stairs
     downStairName: 
     upPosition: {x: 30.24, y: 1.5, z: -203.2}
     upRotation: {x: 0, y: 90, z: 0}
@@ -28448,8 +29827,8 @@ MonoBehaviour:
     stairCollider: {fileID: 533966286}
     floorName: Block B 1st Floor
     stairType: 1
-    upStairName: 
-    downStairName: 
+    upStairName: BlockB 2nd Floor Back Stairs
+    downStairName: BlockB Ground Back Stairs
     upPosition: {x: 30.24, y: 4.5, z: -203.2}
     upRotation: {x: 0, y: 90, z: 0}
     downPosition: {x: 30.24, y: -1, z: -203.2}
@@ -28459,19 +29838,19 @@ MonoBehaviour:
     stairCollider: {fileID: 331829723}
     floorName: Block B 2nd Floor
     stairType: 1
-    upStairName: 
-    downStairName: 
+    upStairName: BlockB 3rd Floor Back Stairs
+    downStairName: BlockB 1st Floor Back Stairs
     upPosition: {x: 30.24, y: 7.5, z: -203.2}
     upRotation: {x: 0, y: 90, z: 0}
     downPosition: {x: 30.24, y: 1.5, z: -203.2}
     downRotation: {x: 0, y: 90, z: 0}
-  - stairName: BlockB 2nd Floor Back Stairs
+  - stairName: BlockB 3rd Floor Back Stairs
     stairObject: {fileID: 415741760}
     stairCollider: {fileID: 415741762}
     floorName: Block B 3rd Floor
     stairType: 2
     upStairName: 
-    downStairName: 
+    downStairName: BlockB 2nd Floor Back Stairs
     upPosition: {x: 30.24, y: 7.5, z: -203.2}
     upRotation: {x: 0, y: 90, z: 0}
     downPosition: {x: 30.24, y: 4.5, z: -203.2}
@@ -28951,9 +30330,9 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1920, y: 1080}
+  m_ReferenceResolution: {x: 1920, y: 3840}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -29002,6 +30381,7 @@ RectTransform:
   - {fileID: 2075098808}
   - {fileID: 1711975749}
   - {fileID: 329011607}
+  - {fileID: 1138608574}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -29042,10 +30422,10 @@ RectTransform:
   - {fileID: 1257509357}
   m_Father: {fileID: 1852014453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 67}
-  m_SizeDelta: {x: 1920, y: 500}
+  m_SizeDelta: {x: -34, y: 500}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1852897463
 MonoBehaviour:
@@ -29146,6 +30526,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -29590,6 +30977,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -29653,7 +31047,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -13, y: -257}
+  m_AnchoredPosition: {x: -44.94, y: -257}
   m_SizeDelta: {x: 120, y: 250}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1939699276
@@ -29762,6 +31156,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -29841,6 +31242,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -30112,33 +31520,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4579454407841743219, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
---- !u!1 &1965247958 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7021324459835417191, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
-  m_PrefabInstance: {fileID: 1232308315}
-  m_PrefabAsset: {fileID: 0}
---- !u!64 &1965247962
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1965247958}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -3310824846634532694, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
 --- !u!1 &1965993411 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2596957926113402938, guid: 857da1d9d41202c44893e926789b8a58, type: 3}
@@ -30218,6 +31599,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -30432,8 +31820,8 @@ MonoBehaviour:
   movementSpeed: 50
   cameraYRotation: 161.9
   useCenterOfChildren: 0
-  glowDuration: 5
-  glowSpeed: 2
+  glowDuration: 3
+  glowSpeed: 3
   minGlowIntensity: 0.5
   maxGlowIntensity: 3
   glowColor: {r: 0, g: 1, b: 1, a: 1}
@@ -30498,6 +31886,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -30577,6 +31972,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -31209,6 +32611,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -31428,6 +32837,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -31507,6 +32923,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -31613,6 +33036,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -31797,8 +33227,8 @@ MonoBehaviour:
   movementSpeed: 50
   cameraYRotation: 329
   useCenterOfChildren: 1
-  glowDuration: 5
-  glowSpeed: 2
+  glowDuration: 3
+  glowSpeed: 3
   minGlowIntensity: 0.5
   maxGlowIntensity: 3
   glowColor: {r: 0, g: 1, b: 1, a: 1}
@@ -31972,8 +33402,8 @@ MonoBehaviour:
   movementSpeed: 50
   cameraYRotation: 148.9
   useCenterOfChildren: 0
-  glowDuration: 5
-  glowSpeed: 2
+  glowDuration: 3
+  glowSpeed: 3
   minGlowIntensity: 0.5
   maxGlowIntensity: 3
   glowColor: {r: 0, g: 1, b: 1, a: 1}
@@ -32046,11 +33476,11 @@ RectTransform:
   - {fileID: 863562596}
   m_Father: {fileID: 1852014453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -13, y: -257}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 120, y: 250}
-  m_Pivot: {x: 1, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2075098809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32469,6 +33899,13 @@ MonoBehaviour:
   doorButtonPanel: {fileID: 0}
   persistentExitButton: {fileID: 0}
   topBar: {fileID: 0}
+  buildingIconButton: {fileID: 0}
+  modeIconsContainer: {fileID: 0}
+  floorName: {fileID: 0}
+  goBackButton: {fileID: 0}
+  goHomeButton: {fileID: 0}
+  modeIconsMinSpacing: 0
+  hideTopBarInInteriorMode: 0
   doorsParent: {fileID: 0}
   maxRaycastDistance: 50
   blockingLayers:
@@ -32926,7 +34363,7 @@ Transform:
   m_GameObject: {fileID: 907144971874733460}
   serializedVersion: 2
   m_LocalRotation: {x: -0.70583886, y: -0.042326313, z: -0.042326313, w: 0.70583886}
-  m_LocalPosition: {x: 34.61718, y: 0.1, z: 12.40119}
+  m_LocalPosition: {x: 34.61718, y: 0.2, z: 12.40119}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
