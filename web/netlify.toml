@@ -30,6 +30,25 @@ for = "/unity/*.wasm*"
 for = "/unity/*.js*"
   [headers.values]
   Content-Type = "application/javascript"
+  Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+for = "/unity/Build/*.js*"
+  [headers.values]
+  Content-Type = "application/javascript"
+  Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+for = "/unity/Build/CoICT3DMap.framework.js"
+  [headers.values]
+  Content-Type = "application/javascript"
+  Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+for = "/unity/Build/CoICT3DMap.loader.js"
+  [headers.values]
+  Content-Type = "application/javascript"
+  Cache-Control = "public, max-age=31536000, immutable"
 
 [build]
   command = "npm run build"
@@ -43,5 +62,13 @@ for = "/unity/*.js*"
   to = "/index.html"
   status = 200
   force = false
+  conditions = {Role = ["!admin"]}
+
+# Ensure Unity files are served correctly
+[[redirects]]
+  from = "/unity/*"
+  to = "/unity/:splat"
+  status = 200
+  force = true
 
 

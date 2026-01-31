@@ -1,1 +1,6 @@
-/* /index.html 200 
+# Unity WebGL files - serve with correct MIME types
+/unity/Build/*    /unity/Build/:splat   200
+/unity/*         /unity/:splat         200
+
+# React SPA routing - fallback to index.html for non-existent files
+/*               /index.html           200 
