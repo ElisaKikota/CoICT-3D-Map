@@ -5,18 +5,22 @@ WORKDIR /app
 # Copy package files first for better caching
 COPY package*.json ./
 
-# Install dependencies (including dev dependencies for build)
-RUN npm ci
+# Install dependencies
+RUN npm install
 
 # Copy the rest of the source code
 COPY . .
 
 # Debug: Show what's in the directory
 RUN ls -la
-RUN cat package.json
+RUN echo "Node version:" && node --version
+RUN echo "NPM version:" && npm --version
 
-# Try running build with more verbose output
-RUN npm run build -- --verbose
+# Check if build script exists
+RUN npm run
+
+# Try building with explicit error handling
+RUN npm run build || (echo "Build failed, checking logs..." && ls -la && exit 1)
 
 # Production stage
 FROM nginx:alpine
