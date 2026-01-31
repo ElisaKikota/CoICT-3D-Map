@@ -11,8 +11,12 @@ RUN npm ci
 # Copy the rest of the source code
 COPY . .
 
-# Build the application
-RUN npm run build
+# Debug: Show what's in the directory
+RUN ls -la
+RUN cat package.json
+
+# Try running build with more verbose output
+RUN npm run build -- --verbose
 
 # Production stage
 FROM nginx:alpine
