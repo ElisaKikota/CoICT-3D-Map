@@ -1,0 +1,5 @@
+# Unity WebGL files
+/unity/* /unity/:splat 200
+
+# React SPA routing - fallback to index.html
+/* /index.html 200

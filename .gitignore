@@ -72,7 +72,6 @@ crashlytics-build.properties
 
 # Node.js dependencies (for web folder)
 web/node_modules/
-web/dist/
 web/.vite/
 
 # OS generated files

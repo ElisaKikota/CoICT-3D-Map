@@ -1,0 +1,16 @@
+# Unity WebGL MIME types
+<FilesMatch "\.loader\.js$">
+    Header set Content-Type "application/javascript"
+</FilesMatch>
+
+<FilesMatch "\.framework\.js$">
+    Header set Content-Type "application/javascript"
+</FilesMatch>
+
+<FilesMatch "\.wasm$">
+    Header set Content-Type "application/wasm"
+</FilesMatch>
+
+<FilesMatch "\.data$">
+    Header set Content-Type "application/octet-stream"
+</FilesMatch>
