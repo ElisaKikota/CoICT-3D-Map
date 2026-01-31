@@ -1,69 +1,33 @@
 import { useState, useEffect, useRef } from 'react'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
+import Layout from './components/Layout.jsx'
+import Home from './pages/Home.jsx'
+import About from './pages/About.jsx'
+import Academics from './pages/Academics.jsx'
+import Research from './pages/Research.jsx'
+import News from './pages/News.jsx'
+import Events from './pages/Events.jsx'
+import Contacts from './pages/Contacts.jsx'
+import Announcements from './pages/Announcements.jsx'
+import GenericNotFound from './pages/GenericNotFound.jsx'
 
-function App() {
-  const [gameLoaded, setGameLoaded] = useState(false)
+function UnityTour() {
   const [showFullscreenPrompt, setShowFullscreenPrompt] = useState(false)
-  const [loadingProgress, setLoadingProgress] = useState(0)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const iframeRef = useRef(null)
 
-  // Preload Unity build files and track progress
-  useEffect(() => {
-    const preloadFiles = async () => {
-      const filesToPreload = [
-        '/unity/Build/CoICT3DMap.loader.js',
-        '/unity/Build/CoICT3DMap.data.unityweb',
-        '/unity/Build/CoICT3DMap.framework.js.unityweb',
-        '/unity/Build/CoICT3DMap.wasm.unityweb'
-      ]
-
-      let loadedCount = 0
-      const totalFiles = filesToPreload.length
-
-      const loadFile = async (url) => {
-        try {
-          const response = await fetch(url, { method: 'HEAD' })
-          if (response.ok) {
-            loadedCount++
-            setLoadingProgress((loadedCount / totalFiles) * 100)
-          }
-        } catch (error) {
-          console.warn(`Failed to preload ${url}:`, error)
-          // Still count as loaded if it exists (network might be slow)
-          loadedCount++
-          setLoadingProgress((loadedCount / totalFiles) * 100)
-        }
-      }
-
-      // Load files in parallel
-      await Promise.all(filesToPreload.map(loadFile))
-      
-      // Set progress to 100% and wait a bit before showing game
-      setLoadingProgress(100)
-      setTimeout(() => {
-        setGameLoaded(true)
-      }, 500)
-    }
-
-    preloadFiles()
-  }, [])
-
   // Handle iframe load event
   useEffect(() => {
-    if (!gameLoaded) return
-
     const iframe = iframeRef.current
     if (!iframe) return
 
     const handleIframeLoad = () => {
-      // Iframe loaded, game should be starting
       console.log('Unity game iframe loaded')
     }
 
     const handleIframeError = (error) => {
       console.error('Iframe error:', error)
-      // Show error message to user
       alert('Failed to load the game. Please check the browser console for details.')
     }
 
@@ -76,12 +40,10 @@ function App() {
         iframe.removeEventListener('error', handleIframeError)
       }
     }
-  }, [gameLoaded])
+  }, [])
 
   // Check resolution and show fullscreen prompt
   useEffect(() => {
-    if (!gameLoaded) return
-
     const checkResolution = () => {
       const width = window.innerWidth
       const height = window.innerHeight
@@ -131,7 +93,7 @@ function App() {
       document.removeEventListener('mozfullscreenchange', checkResolution)
       document.removeEventListener('MSFullscreenChange', checkResolution)
     }
-  }, [gameLoaded, showFullscreenPrompt])
+  }, [showFullscreenPrompt])
 
   const handleFullscreen = async () => {
     try {
@@ -161,27 +123,8 @@ function App() {
     setShowFullscreenPrompt(false)
   }
 
-  if (!gameLoaded) {
-    return (
-      <div className="loading-screen">
-        <div className="loading-content">
-          <div className="loading-spinner"></div>
-          <h2>Downloading Game...</h2>
-          <div className="progress-bar-container">
-            <div 
-              className="progress-bar" 
-              style={{ width: `${loadingProgress}%` }}
-            ></div>
-          </div>
-          <p>{Math.round(loadingProgress)}%</p>
-          <p className="loading-hint">Please wait while we prepare your game experience...</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
-    <div style={{
+    <div className="fullscreen-page" style={{
       display: 'flex',
       flexDirection: 'column',
       height: '100vh',
@@ -197,57 +140,73 @@ function App() {
               For the best experience, please use fullscreen mode.<br/>
               Optimal resolution: <strong>1080 x 1920</strong>
             </p>
-            <p className="current-resolution">
-              Current: {window.innerWidth} x {window.innerHeight}
-            </p>
-            <div className="fullscreen-buttons">
-              <button 
-                onClick={handleFullscreen}
-                className="fullscreen-button primary"
-              >
+            <div className="fullscreen-prompt-buttons">
+              <button onClick={handleFullscreen} className="btn-fullscreen">
                 Enter Fullscreen
               </button>
-              <button 
-                onClick={handleDismissPrompt}
-                className="fullscreen-button secondary"
-              >
-                Continue Anyway
+              <button onClick={handleDismissPrompt} className="btn-dismiss">
+                Dismiss
               </button>
             </div>
           </div>
         </div>
       )}
       
-      <div style={{
-        flex: 1,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        overflow: 'hidden',
-        width: '100%',
-        height: '100%'
-      }}>
-        <iframe
-          ref={iframeRef}
-          title="CoICT 3D Map"
-          src="/unity/index.html"
-          style={{
-            width: '100vw',
-            height: '100vh',
-            maxWidth: '100%',
-            maxHeight: '100%',
-            aspectRatio: '1080 / 1920',
-            objectFit: 'contain',
-            border: 'none',
-            display: 'block'
-          }}
-          allow="fullscreen; autoplay; camera; microphone; gamepad"
-          allowFullScreen
-          sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation"
-        />
-      </div>
+      <iframe
+        ref={iframeRef}
+        src="/unity/index.html"
+        style={{
+          flex: 1,
+          width: '100%',
+          height: '100%',
+          border: 'none',
+          backgroundColor: '#000'
+        }}
+        allowFullScreen
+        allow="autoplay; fullscreen"
+        title="CoICT 3D Campus Map"
+        onError={(e) => console.error('Iframe error:', e)}
+        onLoad={() => console.log('Iframe loaded')}
+      />
     </div>
   )
 }
 
-export default App
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/virtual-tours" element={<UnityTour />} />
+        <Route path="/about/campus-virtual-tour" element={<Navigate to="/virtual-tours" replace />} />
+
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+
+          <Route path="/about/:page" element={<About />} />
+          <Route path="/academics/:category" element={<Academics />} />
+          <Route path="/short-courses" element={<Navigate to="/academics/short-courses" replace />} />
+
+          <Route path="/research" element={<Research />} />
+          <Route path="/research-groups" element={<Research />} />
+          <Route path="/publications" element={<Research />} />
+          <Route path="/research-projects" element={<Research />} />
+
+          <Route path="/research-innovation" element={<Research />} />
+
+          <Route path="/faculty-staff" element={<About />} />
+          <Route path="/faculty" element={<About />} />
+          <Route path="/all-students" element={<About />} />
+          <Route path="/all-alumni" element={<About />} />
+          <Route path="/visitors" element={<About />} />
+
+          <Route path="/all-news" element={<News />} />
+          <Route path="/all-events" element={<Events />} />
+          <Route path="/all-announcements" element={<Announcements />} />
+          <Route path="/all-contacts" element={<Contacts />} />
+
+          <Route path="*" element={<GenericNotFound />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  )
+}

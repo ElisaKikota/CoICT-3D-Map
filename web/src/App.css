@@ -64,60 +64,79 @@
   opacity: 0.7 !important;
 }
 
+/* Fullscreen prompt styles */
 .fullscreen-prompt {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10000;
-  animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  z-index: 9999;
+  color: white;
 }
 
 .fullscreen-prompt-content {
-  background: white;
-  border-radius: 12px;
+  background: rgba(30, 30, 30, 0.95);
   padding: 2rem;
-  max-width: 400px;
+  border-radius: 8px;
   text-align: center;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  animation: slideUp 0.3s ease;
+  max-width: 400px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-@keyframes slideUp {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.fullscreen-prompt-content h3 {
+.fullscreen-prompt h3 {
   margin: 0 0 1rem 0;
-  color: #333;
   font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.fullscreen-prompt p {
+  margin: 0 0 1.5rem 0;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+.fullscreen-prompt-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.btn-fullscreen, .btn-dismiss {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-fullscreen {
+  background: #007bff;
+  color: white;
+}
+
+.btn-fullscreen:hover {
+  background: #0056b3;
+}
+
+.btn-dismiss {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.btn-dismiss:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .fullscreen-prompt-content p {
   margin: 0 0 0.5rem 0;
   color: #666;
-  line-height: 1.6;
 }
 
 .fullscreen-prompt-content p strong {

@@ -3,56 +3,24 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unity Web Player | 3DCoICT</title>
+    <title>Unity Web Player | CoICT3DMap</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
-    <style>
-      /* Ensure proper iframe display */
-      html, body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-      }
-      
-      /* Fullscreen mode: fit to height */
-      #unity-canvas:fullscreen,
-      #unity-canvas:-webkit-full-screen,
-      #unity-canvas:-moz-full-screen,
-      #unity-canvas:-ms-fullscreen {
-        height: 100vh !important;
-        width: auto !important;
-        max-width: 100vw;
-      }
-      
-      :fullscreen #unity-container,
-      :-webkit-full-screen #unity-container,
-      :-moz-full-screen #unity-container,
-      :-ms-fullscreen #unity-container {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-    </style>
   </head>
   <body>
     <div id="unity-container" class="unity-desktop">
       <canvas id="unity-canvas" width=1080 height=1920 tabindex="-1"></canvas>
       <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
+        <!-- <div id="unity-logo"></div> -->
         <div id="unity-progress-bar-empty">
           <div id="unity-progress-bar-full"></div>
         </div>
       </div>
       <div id="unity-warning"> </div>
       <div id="unity-footer">
-        <div id="unity-logo-title-footer"></div>
+        <!-- <div id="unity-logo-title-footer"></div> -->
         <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">3DCoICT</div>
+        <div id="unity-build-title">CoICT3DMap</div>
       </div>
     </div>
     <script>
@@ -87,13 +55,13 @@
       var loaderUrl = buildUrl + "/CoICT3DMap.loader.js";
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/CoICT3DMap.data.unityweb",
-        frameworkUrl: buildUrl + "/CoICT3DMap.framework.js.unityweb",
-        codeUrl: buildUrl + "/CoICT3DMap.wasm.unityweb",
+        dataUrl: buildUrl + "/CoICT3DMap.data",
+        frameworkUrl: buildUrl + "/CoICT3DMap.framework.js",
+        codeUrl: buildUrl + "/CoICT3DMap.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
-        productName: "3DCoICT",
-        productVersion: "0.1.0",
+        productName: "CoICT3DMap",
+        productVersion: "1.0.5",
         showBanner: unityShowBanner,
       };
 
@@ -130,51 +98,12 @@
 
       } else {
         // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
-        canvas.style.width = "1080px";
-        canvas.style.height = "1920px";
+        const padding = 50;
+        canvas.style.width = (window.innerWidth - padding * 2) + "px";
+        canvas.style.height = (window.innerHeight - padding * 2) + "px";
       }
 
       document.querySelector("#unity-loading-bar").style.display = "block";
-
-      // Function to resize canvas to fit height in fullscreen
-      function resizeCanvasForFullscreen() {
-        var fullscreenElement = document.fullscreenElement || 
-                               document.webkitFullscreenElement || 
-                               document.mozFullScreenElement || 
-                               document.msFullscreenElement;
-        
-        var isFullscreen = fullscreenElement === canvas || fullscreenElement === document.body || fullscreenElement === document.documentElement;
-        
-        if (isFullscreen) {
-          // Fit to height
-          var screenHeight = window.innerHeight || screen.height;
-          var screenWidth = window.innerWidth || screen.width;
-          var aspectRatio = 1080 / 1920; // width / height
-          var newWidth = screenHeight * aspectRatio;
-          
-          // Ensure we don't exceed screen width
-          if (newWidth > screenWidth) {
-            newWidth = screenWidth;
-          }
-          
-          canvas.style.height = screenHeight + "px";
-          canvas.style.width = newWidth + "px";
-          canvas.style.maxWidth = "100vw";
-        } else {
-          // Normal mode: maintain aspect ratio
-          if (!/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-            canvas.style.width = "1080px";
-            canvas.style.height = "1920px";
-          }
-        }
-      }
-
-      // Listen for fullscreen changes
-      document.addEventListener('fullscreenchange', resizeCanvasForFullscreen);
-      document.addEventListener('webkitfullscreenchange', resizeCanvasForFullscreen);
-      document.addEventListener('mozfullscreenchange', resizeCanvasForFullscreen);
-      document.addEventListener('MSFullscreenChange', resizeCanvasForFullscreen);
-      window.addEventListener('resize', resizeCanvasForFullscreen);
 
       var script = document.createElement("script");
       script.src = loaderUrl;
@@ -185,13 +114,6 @@
                 document.querySelector("#unity-loading-bar").style.display = "none";
                 document.querySelector("#unity-fullscreen-button").onclick = () => {
                   unityInstance.SetFullscreen(1);
-                  // Wait for fullscreen to activate before resizing
-                  // Use multiple requestAnimationFrame calls to ensure fullscreen transition completes
-                  requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                      setTimeout(resizeCanvasForFullscreen, 50);
-                    });
-                  });
                 };
 
               }).catch((message) => {

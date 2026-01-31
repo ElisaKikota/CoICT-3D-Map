@@ -13,6 +13,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -26,13 +30,19 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden;
+  overflow: auto;
 }
 
 body {
   display: block;
   min-width: 320px;
   min-height: 100vh;
+}
+
+/* Use this class on pages that should be fixed/fullscreen (e.g. Unity route) */
+.fullscreen-page {
+  height: 100vh;
+  overflow: hidden;
 }
 
 h1 {
@@ -70,4 +80,47 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+/* Ensure container utility works */
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
+
+/* Test style: if you see a green background, CSS is loading */
+.test-css {
+  background: #10b981;
+  color: white;
+  padding: 1rem;
+  margin: 1rem;
+  border-radius: 0.5rem;
 }

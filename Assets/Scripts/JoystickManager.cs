@@ -9,6 +9,10 @@ public class JoystickManager : MonoBehaviour
     public SimpleJoystick leftJoystick;
     public SimpleJoystick rightJoystick;
 
+    [Header("Keyboard Controls")]
+    public bool enableKeyboardControls = true;
+    public bool keyboardOverridesJoystick = true;
+
     [Header("Left joystick walk constraint")]
     public bool leftJoystickWalkRestrict = false; // left/right + jump, no forward/back
 
@@ -34,44 +38,104 @@ public class JoystickManager : MonoBehaviour
     // - Walk: x = left/right, y = jump (interpret > 0.6 as jump input)
     public Vector2 GetLeftInput()
     {
-        if (leftJoystick == null) 
+        Vector2 raw = Vector2.zero;
+        if (leftJoystick == null)
         {
             Debug.LogWarning("[JoystickManager] Left joystick is null!");
-            return Vector2.zero;
         }
-        Vector2 raw = leftJoystick.GetInput();
+        else
+        {
+            raw = leftJoystick.GetInput();
+        }
+
+        Vector2 keyboard = Vector2.zero;
+        if (enableKeyboardControls)
+        {
+            float x = 0f;
+            float y = 0f;
+
+            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightBracket)) x += 1f;
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftBracket)) x -= 1f;
+            if (Input.GetKey(KeyCode.W)) y += 1f;
+            if (Input.GetKey(KeyCode.S)) y -= 1f;
+
+            keyboard = new Vector2(Mathf.Clamp(x, -1f, 1f), Mathf.Clamp(y, -1f, 1f));
+        }
+
+        Vector2 combined = raw;
+        if (enableKeyboardControls)
+        {
+            if (keyboardOverridesJoystick)
+            {
+                combined = keyboard.sqrMagnitude > 0f ? keyboard : raw;
+            }
+            else
+            {
+                combined = Vector2.ClampMagnitude(raw + keyboard, 1f);
+            }
+        }
         
         // Debug logging
-        if (raw.magnitude > 0.1f)
+        if (combined.magnitude > 0.1f)
         {
-            Debug.Log($"[JoystickManager] Left joystick input: {raw}, Mode: {current}");
+            Debug.Log($"[JoystickManager] Left joystick input: {combined}, Mode: {current}");
         }
         
         if (current == UIControlMode.ModeWalk && leftJoystickWalkRestrict)
         {
             // Only use X for strafe/turn. If Y > threshold, treat as jump flag via returned vector.y
-            float jump = raw.y > 0.65f ? 1f : 0f;
-            return new Vector2(raw.x, jump);
+            float jump = combined.y > 0.65f ? 1f : 0f;
+            return new Vector2(combined.x, jump);
         }
-        return raw; // Drone/full
+        return combined; // Drone/full
     }
 
     // Right joystick for camera/look: return raw vector2 for both modes
     public Vector2 GetRightInput()
     {
-        if (rightJoystick == null) 
+        Vector2 raw = Vector2.zero;
+        if (rightJoystick == null)
         {
             Debug.LogWarning("[JoystickManager] Right joystick is null!");
-            return Vector2.zero;
         }
-        Vector2 raw = rightJoystick.GetInput();
+        else
+        {
+            raw = rightJoystick.GetInput();
+        }
+
+        Vector2 keyboard = Vector2.zero;
+        if (enableKeyboardControls)
+        {
+            float x = 0f;
+            float y = 0f;
+
+            if (Input.GetKey(KeyCode.RightArrow)) x += 1f;
+            if (Input.GetKey(KeyCode.LeftArrow)) x -= 1f;
+            if (Input.GetKey(KeyCode.UpArrow)) y += 1f;
+            if (Input.GetKey(KeyCode.DownArrow)) y -= 1f;
+
+            keyboard = new Vector2(Mathf.Clamp(x, -1f, 1f), Mathf.Clamp(y, -1f, 1f));
+        }
+
+        Vector2 combined = raw;
+        if (enableKeyboardControls)
+        {
+            if (keyboardOverridesJoystick)
+            {
+                combined = keyboard.sqrMagnitude > 0f ? keyboard : raw;
+            }
+            else
+            {
+                combined = Vector2.ClampMagnitude(raw + keyboard, 1f);
+            }
+        }
         
         // Debug logging
-        if (raw.magnitude > 0.1f)
+        if (combined.magnitude > 0.1f)
         {
-            Debug.Log($"[JoystickManager] Right joystick input: {raw}, Mode: {current}");
+            Debug.Log($"[JoystickManager] Right joystick input: {combined}, Mode: {current}");
         }
         
-        return raw;
+        return combined;
     }
 }
