@@ -26,7 +26,7 @@ function UnityTour() {
     }}>
       <iframe
         ref={iframeRef}
-        src="/unity/index.html"
+        src="/unity/index-render.html"
         style={{
           flex: 1,
           width: '100%',
