@@ -8,6 +8,10 @@ public class Camera2DController : MonoBehaviour
     public float zoomSpeed = 5f;
     [Tooltip("Pinch zoom sensitivity")]
     public float pinchZoomSpeed = 0.1f;
+
+    [Header("Two-Finger Rotation")]
+    public bool enableTwoFingerRotation = true;
+    public float twoFingerRotationSpeed = 1f;
     [Tooltip("Minimum camera height (zoomed in)")]
     public float minHeight = 50f;
     [Tooltip("Maximum camera height (zoomed out)")]
@@ -24,6 +28,8 @@ public class Camera2DController : MonoBehaviour
     public float groundYPosition = 0f;
 
     private Vector3 lastMousePos;
+    private Vector2 lastTouchPos;
+    private bool isTouchPanning;
     private float lastPinchDistance = 0f;
     private Camera cam;
     private float groundLevel;
@@ -108,6 +114,25 @@ public class Camera2DController : MonoBehaviour
         {
             Touch touch0 = Input.GetTouch(0);
             Touch touch1 = Input.GetTouch(1);
+
+            // --- Two finger rotation (twist) ---
+            // We compute angle change between the touch vector in the previous frame and current frame.
+            if (enableTwoFingerRotation)
+            {
+                Vector2 prevPos0 = touch0.position - touch0.deltaPosition;
+                Vector2 prevPos1 = touch1.position - touch1.deltaPosition;
+
+                Vector2 prevVector = prevPos1 - prevPos0;
+                Vector2 currentVector = touch1.position - touch0.position;
+
+                if (prevVector.sqrMagnitude > 0.01f && currentVector.sqrMagnitude > 0.01f)
+                {
+                    float deltaAngle = Vector2.SignedAngle(prevVector, currentVector);
+
+                    // Positive twist should feel natural; invert if needed by adjusting the sign here.
+                    transform.Rotate(0f, deltaAngle * twoFingerRotationSpeed, 0f, Space.World);
+                }
+            }
             
             // Calculate current distance between touches
             float currentDistance = Vector2.Distance(touch0.position, touch1.position);
@@ -143,37 +168,75 @@ public class Camera2DController : MonoBehaviour
         {
             // Reset pinch distance when not pinching
             lastPinchDistance = 0f;
-            
-            // Pan (only when not pinching) - using screen-to-world conversion for accurate movement
-            if (Input.GetMouseButtonDown(0)) lastMousePos = Input.mousePosition;
-            if (Input.GetMouseButton(0) && cam != null)
+
+            // One-finger touch pan (mobile)
+            if (Input.touchCount == 1 && cam != null)
             {
-                Vector3 currentScreenPos = Input.mousePosition;
-                Vector3 deltaScreen = currentScreenPos - lastMousePos;
-                
-                // Convert screen movement to world movement at ground level
-                // This ensures 1 pixel on screen = proportional world movement
-                Vector3 worldDelta = ConvertScreenDeltaToWorldDelta(deltaScreen, groundLevel);
-                
-                // Apply pan sensitivity multiplier
-                worldDelta *= panSensitivity;
-                
-                Vector3 newPosition = transform.position;
-                // Apply the world delta (invert X to match expected pan direction - dragging right moves map left)
-                // Z axis is already correctly oriented from screen Y
-                newPosition += new Vector3(-worldDelta.x, 0, worldDelta.z);
-                
-                // Clamp position within boundary if boundary controller is available
-                // Only clamp X and Z for 2D mode (Y can change with zoom)
-                if (boundaryController != null && boundaryController.exteriorBoundary != null)
+                Touch t = Input.GetTouch(0);
+
+                if (t.phase == TouchPhase.Began)
                 {
-                    Vector3 clamped = boundaryController.ClampToExteriorBoundary(newPosition);
-                    // Preserve Y position (height/zoom) when clamping
-                    newPosition = new Vector3(clamped.x, newPosition.y, clamped.z);
+                    isTouchPanning = true;
+                    lastTouchPos = t.position;
                 }
-                
-                transform.position = newPosition;
-                lastMousePos = currentScreenPos;
+                else if ((t.phase == TouchPhase.Moved || t.phase == TouchPhase.Stationary) && isTouchPanning)
+                {
+                    Vector2 deltaScreen2 = t.position - lastTouchPos;
+                    Vector3 worldDelta = ConvertScreenDeltaToWorldDelta(new Vector3(deltaScreen2.x, deltaScreen2.y, 0f), groundLevel);
+                    worldDelta *= panSensitivity;
+
+                    float yaw = transform.eulerAngles.y;
+                    Quaternion yawRot = Quaternion.Euler(0f, yaw, 0f);
+                    Vector3 rightYaw = yawRot * Vector3.right;
+                    Vector3 forwardYaw = yawRot * Vector3.forward;
+
+                    Vector3 newPosition = transform.position;
+                    newPosition += (-rightYaw * worldDelta.x) + (forwardYaw * worldDelta.z);
+
+                    if (boundaryController != null && boundaryController.exteriorBoundary != null)
+                    {
+                        Vector3 clamped = boundaryController.ClampToExteriorBoundary(newPosition);
+                        newPosition = new Vector3(clamped.x, newPosition.y, clamped.z);
+                    }
+
+                    transform.position = newPosition;
+                    lastTouchPos = t.position;
+                }
+                else if (t.phase == TouchPhase.Ended || t.phase == TouchPhase.Canceled)
+                {
+                    isTouchPanning = false;
+                }
+            }
+            
+            // Pan (editor / desktop) - using screen-to-world conversion for accurate movement
+            if (Input.touchCount == 0)
+            {
+                if (Input.GetMouseButtonDown(0)) lastMousePos = Input.mousePosition;
+                if (Input.GetMouseButton(0) && cam != null)
+                {
+                    Vector3 currentScreenPos = Input.mousePosition;
+                    Vector3 deltaScreen = currentScreenPos - lastMousePos;
+
+                    Vector3 worldDelta = ConvertScreenDeltaToWorldDelta(deltaScreen, groundLevel);
+                    worldDelta *= panSensitivity;
+
+                    float yaw = transform.eulerAngles.y;
+                    Quaternion yawRot = Quaternion.Euler(0f, yaw, 0f);
+                    Vector3 rightYaw = yawRot * Vector3.right;
+                    Vector3 forwardYaw = yawRot * Vector3.forward;
+
+                    Vector3 newPosition = transform.position;
+                    newPosition += (-rightYaw * worldDelta.x) + (forwardYaw * worldDelta.z);
+
+                    if (boundaryController != null && boundaryController.exteriorBoundary != null)
+                    {
+                        Vector3 clamped = boundaryController.ClampToExteriorBoundary(newPosition);
+                        newPosition = new Vector3(clamped.x, newPosition.y, clamped.z);
+                    }
+
+                    transform.position = newPosition;
+                    lastMousePos = currentScreenPos;
+                }
             }
         }
 
