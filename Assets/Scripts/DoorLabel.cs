@@ -15,6 +15,14 @@ public class DoorLabel : MonoBehaviour
     
     [Tooltip("Distance offset toward camera (world space)")]
     public float cameraOffsetDistance = 0.25f;
+
+    public bool useColliderBounds = true;
+    public bool placeOnBoundsFaceTowardCamera = true;
+    public float boundsFacePadding = 0.02f;
+    public bool billboardToCamera = false;
+    public bool offsetTowardCamera = false;
+
+    public float billboardYawOffset = 0f;
     
     [Tooltip("Font size")]
     public float fontSize = 2f;
@@ -25,6 +33,9 @@ public class DoorLabel : MonoBehaviour
     private TextMeshPro labelTextMesh;
     private Camera mainCamera;
     private bool isVisible = false;
+    private Collider targetCollider;
+
+    private Vector3 lastFaceNormalWorld = Vector3.forward;
     
     void Start()
     {
@@ -46,8 +57,17 @@ public class DoorLabel : MonoBehaviour
             {
                 // Create new GameObject for label
                 GameObject labelObj = new GameObject("DoorLabel");
-                // Don't parent it - we'll position it in world space
+                labelObj.transform.SetParent(transform, worldPositionStays: false);
                 labelTextMesh = labelObj.AddComponent<TextMeshPro>();
+            }
+        }
+
+        if (targetCollider == null)
+        {
+            targetCollider = GetComponent<Collider>();
+            if (targetCollider == null)
+            {
+                targetCollider = GetComponentInChildren<Collider>();
             }
         }
         
@@ -59,12 +79,10 @@ public class DoorLabel : MonoBehaviour
             labelTextMesh.color = textColor;
             labelTextMesh.alignment = TextAlignmentOptions.Center;
             labelTextMesh.textWrappingMode = TextWrappingModes.NoWrap;
-            
-            // Make text face camera initially
-            if (mainCamera != null)
+
+            if (labelTextMesh.transform.parent != transform)
             {
-                labelTextMesh.transform.LookAt(labelTextMesh.transform.position + mainCamera.transform.rotation * Vector3.forward,
-                    mainCamera.transform.rotation * Vector3.up);
+                labelTextMesh.transform.SetParent(transform, worldPositionStays: true);
             }
         }
         
@@ -74,27 +92,123 @@ public class DoorLabel : MonoBehaviour
     
     void LateUpdate()
     {
-        // Make text always face camera and offset toward camera
-        if (labelTextMesh != null && mainCamera != null)
+        if (labelTextMesh == null) return;
+
+        Vector3 basePos;
+        if (useColliderBounds && targetCollider != null)
         {
-            Vector3 doorPosition = transform.position + transform.TransformDirection(labelOffset);
+            // Prefer using collider local space for rotated doors (BoxCollider), otherwise fallback to world bounds.
+            BoxCollider box = targetCollider as BoxCollider;
+            if (placeOnBoundsFaceTowardCamera && mainCamera != null && box != null)
+            {
+                Transform ct = box.transform;
+                Vector3 localCenter = box.center;
+                Vector3 worldCenter = ct.TransformPoint(localCenter);
+                Vector3 worldDir = mainCamera.transform.position - worldCenter;
+                Vector3 localDir = ct.InverseTransformDirection(worldDir);
+
+                Vector3 halfSize = box.size * 0.5f;
+                Vector3 localPos = localCenter;
+
+                float ax = Mathf.Abs(localDir.x);
+                float ay = Mathf.Abs(localDir.y);
+                float az = Mathf.Abs(localDir.z);
+
+                if (ax >= ay && ax >= az)
+                {
+                    float sign = Mathf.Sign(localDir.x);
+                    localPos.x += sign * (halfSize.x + boundsFacePadding);
+                    lastFaceNormalWorld = ct.TransformDirection(new Vector3(sign, 0f, 0f));
+                }
+                else if (ay >= ax && ay >= az)
+                {
+                    float sign = Mathf.Sign(localDir.y);
+                    localPos.y += sign * (halfSize.y + boundsFacePadding);
+                    lastFaceNormalWorld = ct.TransformDirection(new Vector3(0f, sign, 0f));
+                }
+                else
+                {
+                    float sign = Mathf.Sign(localDir.z);
+                    localPos.z += sign * (halfSize.z + boundsFacePadding);
+                    lastFaceNormalWorld = ct.TransformDirection(new Vector3(0f, 0f, sign));
+                }
+
+                basePos = ct.TransformPoint(localPos);
+            }
+            else
+            {
+                Bounds b = targetCollider.bounds;
+                basePos = b.center;
+
+                if (placeOnBoundsFaceTowardCamera && mainCamera != null)
+                {
+                    Vector3 dir = mainCamera.transform.position - b.center;
+                    if (dir.sqrMagnitude > 0.0001f)
+                    {
+                        float ax = Mathf.Abs(dir.x);
+                        float ay = Mathf.Abs(dir.y);
+                        float az = Mathf.Abs(dir.z);
+
+                        if (ax >= ay && ax >= az)
+                        {
+                            float sign = Mathf.Sign(dir.x);
+                            basePos.x += sign * (b.extents.x + boundsFacePadding);
+                            lastFaceNormalWorld = new Vector3(sign, 0f, 0f);
+                        }
+                        else if (ay >= ax && ay >= az)
+                        {
+                            float sign = Mathf.Sign(dir.y);
+                            basePos.y += sign * (b.extents.y + boundsFacePadding);
+                            lastFaceNormalWorld = new Vector3(0f, sign, 0f);
+                        }
+                        else
+                        {
+                            float sign = Mathf.Sign(dir.z);
+                            basePos.z += sign * (b.extents.z + boundsFacePadding);
+                            lastFaceNormalWorld = new Vector3(0f, 0f, sign);
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            basePos = transform.position;
+        }
+
+        basePos += transform.TransformDirection(labelOffset);
+
+        if (billboardToCamera && mainCamera != null)
+        {
             Vector3 cameraPosition = mainCamera.transform.position;
-            Vector3 directionToCamera = cameraPosition - doorPosition;
-            
+            Vector3 directionToCamera = cameraPosition - basePos;
             if (directionToCamera.sqrMagnitude > 0.01f)
             {
-                // Normalize direction
                 Vector3 normalizedDirection = directionToCamera.normalized;
-                
-                // Position label offset toward camera from door position
-                Vector3 labelPosition = doorPosition + normalizedDirection * cameraOffsetDistance;
+
+                Vector3 labelPosition = basePos;
+                if (offsetTowardCamera)
+                {
+                    labelPosition = basePos + normalizedDirection * cameraOffsetDistance;
+                }
+
                 labelTextMesh.transform.position = labelPosition;
-                
-                // Make text face camera
                 if (isVisible)
                 {
-                    labelTextMesh.transform.rotation = Quaternion.LookRotation(-directionToCamera, mainCamera.transform.up);
+                    Quaternion look = Quaternion.LookRotation(directionToCamera, mainCamera.transform.up);
+                    labelTextMesh.transform.rotation = look * Quaternion.Euler(0f, billboardYawOffset, 0f);
                 }
+            }
+        }
+        else
+        {
+            labelTextMesh.transform.position = basePos;
+            if (isVisible)
+            {
+                // Fixed orientation on the selected face (no camera billboarding).
+                Vector3 n = lastFaceNormalWorld.sqrMagnitude > 0.0001f ? lastFaceNormalWorld.normalized : transform.forward;
+                Quaternion faceRot = Quaternion.LookRotation(n, transform.up);
+                labelTextMesh.transform.rotation = faceRot * Quaternion.Euler(0f, billboardYawOffset, 0f);
             }
         }
     }

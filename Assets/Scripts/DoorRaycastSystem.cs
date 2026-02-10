@@ -740,9 +740,13 @@ public class DoorRaycastSystem : MonoBehaviour
         // Use door name if set, otherwise use GameObject name
         string displayText = !string.IsNullOrEmpty(door.doorName) ? door.doorName : door.doorObject.name;
         label.SetText(displayText);
-        
-        // Set camera offset distance to 0.25
-        label.cameraOffsetDistance = 0.25f;
+
+        label.useColliderBounds = true;
+        label.placeOnBoundsFaceTowardCamera = true;
+        label.boundsFacePadding = 0.02f;
+        label.billboardToCamera = false;
+        label.offsetTowardCamera = false;
+        label.billboardYawOffset = 180f;
         
         // Set text color to black for doors with secondary interiors
         if (isSecondaryInteriorDoor)
