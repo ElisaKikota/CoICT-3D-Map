@@ -138,6 +138,7 @@ public class InteriorExteriorManager : MonoBehaviour
         // Setup fade image
         if (fadeImage != null)
         {
+            EnsureFadeImageIsFullScreen();
             fadeImage.color = new Color(fadeColor.r, fadeColor.g, fadeColor.b, 0f);
             fadeImage.gameObject.SetActive(false);
         }
@@ -214,6 +215,38 @@ public class InteriorExteriorManager : MonoBehaviour
                 SetupRoomTrigger(entryPoint);
             }
         }
+    }
+
+    void OnEnable()
+    {
+        if (fadeImage != null)
+        {
+            EnsureFadeImageIsFullScreen();
+        }
+    }
+
+    void OnValidate()
+    {
+        if (fadeImage != null)
+        {
+            EnsureFadeImageIsFullScreen();
+        }
+    }
+
+    private void EnsureFadeImageIsFullScreen()
+    {
+        RectTransform rt = fadeImage.rectTransform;
+        if (rt == null) return;
+
+        rt.anchorMin = Vector2.zero;
+        rt.anchorMax = Vector2.one;
+        rt.pivot = new Vector2(0.5f, 0.5f);
+        rt.anchoredPosition = Vector2.zero;
+        rt.sizeDelta = Vector2.zero;
+        rt.offsetMin = Vector2.zero;
+        rt.offsetMax = Vector2.zero;
+
+        fadeImage.raycastTarget = true;
     }
     
     void SetupRoomTrigger(RoomEntryPoint entryPoint)
@@ -756,8 +789,10 @@ public class InteriorExteriorManager : MonoBehaviour
     IEnumerator FadeOut()
     {
         if (fadeImage == null) yield break;
-        
+
+        EnsureFadeImageIsFullScreen();
         fadeImage.gameObject.SetActive(true);
+        fadeImage.transform.SetAsLastSibling();
         float elapsed = 0f;
         
         while (elapsed < fadeDuration)
