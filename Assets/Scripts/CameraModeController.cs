@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public enum TourMode { Mode2D, Drone, Walk, Mode3D }
 
@@ -58,6 +59,15 @@ public class CameraModeController : MonoBehaviour
     [Header("Settings")]
     public float transitionSpeed = 5f;
 
+    [Header("Yaw Drag Settings")]
+    [Tooltip("Speed multiplier for yaw rotation when dragging horizontally. Higher values rotate more degrees per drag. Negative values reverse rotation direction.")]
+    public float speedMultiplier = 0.1f;
+    public float yawSpeedMultiplier
+    {
+        get => speedMultiplier;
+        set => speedMultiplier = value;
+    }
+
     [Header("3D Zoom Limits")]
     public bool override3DZoomLimits = false;
     public float mode3DMinHeight = 10f;
@@ -92,6 +102,13 @@ public class CameraModeController : MonoBehaviour
     private Coroutine sidebarSlideCoroutine;
 
     private Coroutine goHomeCoroutine;
+
+    // Yaw drag control state
+    private bool isMouseYawDragging = false;
+    private float lastMousePixelX = 0f;
+    private bool isTouchYawDragging = false;
+    private int yawTouchFingerId = -1;
+    private float lastTouchPixelX = 0f;
 
     void Awake()
     {
@@ -278,6 +295,9 @@ public class CameraModeController : MonoBehaviour
         // Don't interfere with camera movement in any mode
         // Let the Camera2DController handle 2D mode movement
         // Let DroneController and WalkController handle their respective modes
+
+        // Handle 360 yaw control by dragging horizontally in Drone or Walk mode
+        HandleYawDragControl();
     }
 
     void ApplySatelliteButtonUI(TourMode mode)
@@ -299,6 +319,8 @@ public class CameraModeController : MonoBehaviour
     public void SwitchMode(TourMode mode)
     {
         TourMode previousMode = currentMode;
+
+        ResetYawDragState();
 
         // If an earlier error prevented Start from completing, make sure we don't crash
         currentMode = mode;
@@ -835,6 +857,11 @@ public class CameraModeController : MonoBehaviour
             ForceFogKeywords();
         }
     }
+
+    void OnDisable()
+    {
+        ResetYawDragState();
+    }
     
     // Sidebar initialization and control methods
     void InitializeSidebar()
@@ -1014,4 +1041,156 @@ public class CameraModeController : MonoBehaviour
         
         sidebarSlideCoroutine = null;
     }
+
+    #region Yaw Drag Control
+    /// <summary>
+    /// Handles 360 horizontal yaw rotation when dragging horizontally on screen in Drone or Walk mode.
+    /// Dragging left to right rotates camera right to left about world Y axis.
+    /// Dragging right to left rotates camera left to right about world Y axis.
+    /// speedMultiplier controls rotation sensitivity and direction.
+    /// </summary>
+    private void HandleYawDragControl()
+    {
+        // Only active in Drone or Walk mode
+        if (currentMode != TourMode.Drone && currentMode != TourMode.Walk)
+        {
+            ResetYawDragState();
+            return;
+        }
+
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main;
+            if (mainCamera == null) return;
+        }
+
+        if (Input.touchCount > 0)
+        {
+            HandleTouchYawDrag();
+        }
+        else
+        {
+            HandleMouseYawDrag();
+        }
+    }
+
+    private void HandleMouseYawDrag()
+    {
+        if (isTouchYawDragging)
+        {
+            isTouchYawDragging = false;
+            yawTouchFingerId = -1;
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            // Do not initiate drag if cursor is over UI elements
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            {
+                isMouseYawDragging = false;
+                return;
+            }
+
+            isMouseYawDragging = true;
+            lastMousePixelX = Input.mousePosition.x;
+        }
+        else if (Input.GetMouseButton(0) && isMouseYawDragging)
+        {
+            float currentMousePixelX = Input.mousePosition.x;
+            float deltaX = currentMousePixelX - lastMousePixelX;
+
+            if (Mathf.Abs(deltaX) > 0.0001f)
+            {
+                ApplyYawRotation(deltaX);
+            }
+
+            lastMousePixelX = currentMousePixelX;
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            isMouseYawDragging = false;
+        }
+    }
+
+    private void HandleTouchYawDrag()
+    {
+        if (isMouseYawDragging)
+        {
+            isMouseYawDragging = false;
+        }
+
+        if (isTouchYawDragging)
+        {
+            bool foundTouch = false;
+            for (int i = 0; i < Input.touchCount; i++)
+            {
+                Touch touch = Input.GetTouch(i);
+                if (touch.fingerId == yawTouchFingerId)
+                {
+                    foundTouch = true;
+                    if (touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary)
+                    {
+                        float deltaX = touch.position.x - lastTouchPixelX;
+                        if (Mathf.Abs(deltaX) > 0.0001f)
+                        {
+                            ApplyYawRotation(deltaX);
+                        }
+                        lastTouchPixelX = touch.position.x;
+                    }
+                    else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+                    {
+                        isTouchYawDragging = false;
+                        yawTouchFingerId = -1;
+                    }
+                    break;
+                }
+            }
+
+            if (!foundTouch)
+            {
+                isTouchYawDragging = false;
+                yawTouchFingerId = -1;
+            }
+        }
+
+        if (!isTouchYawDragging)
+        {
+            for (int i = 0; i < Input.touchCount; i++)
+            {
+                Touch touch = Input.GetTouch(i);
+                if (touch.phase == TouchPhase.Began)
+                {
+                    // Ignore touches that began over UI elements (e.g. joysticks, buttons)
+                    if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+                    {
+                        continue;
+                    }
+
+                    isTouchYawDragging = true;
+                    yawTouchFingerId = touch.fingerId;
+                    lastTouchPixelX = touch.position.x;
+                    break;
+                }
+            }
+        }
+    }
+
+    private void ApplyYawRotation(float deltaX)
+    {
+        if (mainCamera == null) return;
+
+        // User drags left to right (deltaX > 0) -> rotates right to left about y relative to world space (-Y rotation).
+        // User drags right to left (deltaX < 0) -> rotates left to right about y relative to world space (+Y rotation).
+        // Positive speedMultiplier scales degrees; negative speedMultiplier inverts rotation direction.
+        float yawAngle = -deltaX * speedMultiplier;
+        mainCamera.transform.Rotate(0f, yawAngle, 0f, Space.World);
+    }
+
+    private void ResetYawDragState()
+    {
+        isMouseYawDragging = false;
+        isTouchYawDragging = false;
+        yawTouchFingerId = -1;
+    }
+    #endregion
 }
